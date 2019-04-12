@@ -1,0 +1,5 @@
+---
+repositoryUrl: https://github.com/hipagesgroup/hyperkops
+verifyConditions: ['@semantic-release/github']
+prepare: []
+publish: ['@semantic-release/github']
