@@ -1,6 +1,6 @@
 ### Jira
 
-- [ ] My PR addresses the following issues:
+- [ ] Ticket:
  
 ### Description
 
