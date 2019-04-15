@@ -1,4 +1,5 @@
-import logger as log
+import logging as log
+
 
 class PodMonitor:
     def __init__(self):

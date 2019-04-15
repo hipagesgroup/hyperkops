@@ -1,3 +1,6 @@
+import logging as log
+
+
 class HyperoptJobLauncher:
     def __init__(self):
-        print("Launching the hyperopt job")
+        log.info("Launching the hyperopt job")
