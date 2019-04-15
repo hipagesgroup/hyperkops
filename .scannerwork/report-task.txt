@@ -1,0 +1,7 @@
+organization=hipagesgroup
+projectKey=hipagesgroup_hyperkops
+serverUrl=https://sonarcloud.io
+serverVersion=7.8.0.23279
+dashboardUrl=https://sonarcloud.io/dashboard?id=hipagesgroup_hyperkops
+ceTaskId=AWofBcVRAeX8nbrg3A9h
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWofBcVRAeX8nbrg3A9h
