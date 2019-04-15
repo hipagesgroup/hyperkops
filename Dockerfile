@@ -18,7 +18,6 @@ RUN  pip install -r ${HYPERKOPS_HOME}/tests/requirements.txt
 COPY monitor monitor
 COPY launcher launcher
 COPY tests tests
-RUN find . -name '*.pyc' -delete
 RUN py.test -v --cov=.  --cov-config .coveragerc
 
 FROM base AS run
@@ -26,7 +25,6 @@ FROM base AS run
 COPY monitor monitor
 COPY launcher launcher
 COPY run.sh run.sh
-RUN find . -name '*.pyc' -delete
 
 ENTRYPOINT run.sh
 
