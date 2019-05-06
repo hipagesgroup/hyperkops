@@ -66,7 +66,7 @@ def main_monitor():
 class HyperoptMonitor:
     """Instantiation and starting of the hyperopt monitoring tool"""
 
-    def __init__(self, args):
+    def __init__(self, config):
 
         self.args = args
         log.info("Starting Monitor")
