@@ -83,7 +83,7 @@ class HyperoptMonitor:
                                                self.args.trials_collection)
 
         hyperopt_timeout_monitor = MongodbTrialsTimeoutMonitor(float(self.config.timeout_interval),
-                                                               float(self.args.update_interval),
+                                                               float(self.config.update_interval),
                                                                mongodb_connection)
 
         hyperopt_timeout_monitor.monitor_for_stale_jobs()
