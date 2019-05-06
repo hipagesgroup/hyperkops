@@ -1,4 +1,5 @@
 import argparse
+import logging as log
 import os
 
 from hyperkops.monitor.mongo_db_utils import MongodbConnection
@@ -12,6 +13,8 @@ def main_monitor():
         if os.environ.get(key):
             return {'default': os.environ.get(key)}
         else:
+            log.error("Missing " + str(key.lower())
+                      + "setting. Please use command line argument or environment variable " + key)
             return {'required': True}
 
     parser = argparse.ArgumentParser()
