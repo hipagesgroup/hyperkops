@@ -20,11 +20,10 @@ COPY launcher launcher
 COPY tests tests
 RUN py.test -v --cov=.  --cov-config .coveragerc
 
-FROM base AS run
+FROM base AS production
 
-COPY hyperkops/monitor monitor
-COPY launcher launcher
-COPY run.sh run.sh
+COPY hyperkops ${HYPERKOPS_HOME}
 
+## TODO: UPDATE ENTRY POINT TO REFLECT COMMAND LINE INSTALL
 ENTRYPOINT run.sh
 

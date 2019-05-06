@@ -10,7 +10,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'hyperjops-monitor = hyperkops:hyperopt_monitor:main',
+            'hyperkops-monitor=hyperkops.monitor:main',
         ]},
     install_requires=[
         'hyperopt==0.1.2',
