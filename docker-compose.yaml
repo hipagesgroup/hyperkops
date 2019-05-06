@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+  monitor:
+    image: hyperkops/timer:v0
+    environment:
+      MONGO_DB_PORT: 27017
+      MONGO_DB_ADDRESS: mongo
+      TRIALS_DB: model_db
+      TRIALS_COLLECTION: jobs
+      TIMEOUT_INTERVAL: 15
+      UPDATE_INTERVAL: 1
+      PYTHONUNBUFFERED: 0
+      LOGLEVEL: INFO

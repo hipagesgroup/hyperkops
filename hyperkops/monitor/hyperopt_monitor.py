@@ -5,6 +5,9 @@ import os
 from hyperkops.monitor.mongo_db_utils import MongodbConnection
 from hyperkops.monitor.trials_timeout_monitor import MongodbTrialsTimeoutMonitor
 
+LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
+log.basicConfig(level=LOGLEVEL)
+
 
 def main_monitor():
     """Main entry point from command line to initialise the hyperopt stale job monitor"""
@@ -18,7 +21,6 @@ def main_monitor():
             return {'required': True}
 
     parser = argparse.ArgumentParser()
-
     parser.add_argument("-d",
                         "--mongo_db_address",
                         dest='mongo_db_address',
@@ -58,10 +60,6 @@ def main_monitor():
 
     args = parser.parse_args()
 
-    if args:
-        parser.print_help()
-        return -1
-
     return HyperoptMonitor(args)
 
 
@@ -69,7 +67,9 @@ class HyperoptMonitor:
     """Instantiation and starting of the hyperopt monitoring tool"""
 
     def __init__(self, args):
+
         self.args = args
+        log.info("Starting Monitor")
         self.start_monitoring()
 
     def start_monitoring(self):
@@ -82,8 +82,8 @@ class HyperoptMonitor:
                                                self.args.trials_db,
                                                self.args.trials_collection)
 
-        hyperopt_timeout_monitor = MongodbTrialsTimeoutMonitor(self.args.timeout_interval,
-                                                               self.args.update_interval,
+        hyperopt_timeout_monitor = MongodbTrialsTimeoutMonitor(float(self.args.timeout_interval),
+                                                               float(self.args.update_interval),
                                                                mongodb_connection)
 
         hyperopt_timeout_monitor.monitor_for_stale_jobs()
