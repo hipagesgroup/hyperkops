@@ -65,6 +65,13 @@ class MongodbTrialsTimeoutMonitor:
 
     @staticmethod
     def _log_warning_of_error(obj_id, trial_id, owner):
+        """
+        Log an error when a job is stale
+        :param obj_id: The ID of the relevant object in the mongoDB
+        :param trial_id: Hyperopt Trial ID for this stale trail
+        :param owner: Location of stale trial, including the pod name and pid
+        :return:
+        """
         warning_detail = ('obj_id : ' + str(obj_id) +
                           ":::: trial id : " + str(trial_id) +
                           ":::: Owner [pod_name, pid] : " + str(owner))
