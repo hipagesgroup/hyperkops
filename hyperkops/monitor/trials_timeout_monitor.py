@@ -8,7 +8,7 @@ from hyperopt.utils import coarse_utcnow
 
 
 class MongodbTrialsTimeoutMonitor:
-    """Queries the table hyperopt uses to store state and prints the results"""
+    """Queries the table hyperopt uses to store state and time out long running trials"""
     log.basicConfig(level=os.environ.get("LOGLEVEL"),
                     format='%(asctime)s %(levelname)s %(message)s')
 
