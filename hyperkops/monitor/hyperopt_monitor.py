@@ -6,7 +6,7 @@ from hyperkops.monitor.mongo_db_utils import MongodbConnection
 from hyperkops.monitor.trials_timeout_monitor import MongodbTrialsTimeoutMonitor
 
 LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
-log.basicConfig(level=LOGLEVEL)
+log.basicConfig(level=os.environ.get('LOGLEVEL', 'WARNING').upper())
 
 
 def main_monitor():
