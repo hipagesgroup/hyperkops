@@ -14,7 +14,7 @@ def main_monitor():
             return {'default': os.environ.get(key)}
         else:
             log.error("Missing " + str(key.lower())
-                      + "setting. Please use command line argument or environment variable " + key)
+                      + " configuration. Please use command line argument or environment variable " + key)
             return {'required': True}
 
     parser = argparse.ArgumentParser()

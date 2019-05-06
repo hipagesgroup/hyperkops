@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='hyperkops',
@@ -6,11 +6,11 @@ setup(
     description='Monitoring tool which enables running hyperopt in kubenetes',
     url='https://github.com/hipagesgroup/hyperkops',
     author='hipages Datascience',
-    packages=['hyperkops'],
+    packages=find_packages(),
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'hyperkops-monitor=hyperkops.monitor:main',
+            'hyperkops-monitor=hyperkops.monitor.hyperopt_monitor:main_monitor',
         ]},
     install_requires=[
         'hyperopt==0.1.2',
