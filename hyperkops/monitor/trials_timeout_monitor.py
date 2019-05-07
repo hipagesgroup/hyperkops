@@ -45,15 +45,22 @@ class MongodbTrialsTimeoutMonitor:
             # upserting them to an error state
             for trial in self._mongodb_connection.collection.find(
                     {'state': JOB_STATE_RUNNING, 'refresh_time': {'$lt': cur_timeout_boundary}}):
-                self._log_warning_of_error(trial['_id'], trial['tid'], trial['owner'])
-                # Update the state of the job to an error
-                trial['state'] = JOB_STATE_ERROR
-                # Upsert the job into mongodb
-                self._mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
-                counter = counter + 1
+                counter = self._update_stale_trial(counter, trial)
             log.info("Stale job check complete")
             log.info("Number of stale jobs found :: " + str(counter))
             sleep(self._update_interval)
+
+    def _update_stale_trial(self, counter, trial):
+
+        log.warning("Forcing Job to error state due to timeout: job_id : %s, trail : %s,  Owner [pod_name, pid] : %s" %
+                    (trial['_id'], trial['tid'], trial['owner']))
+
+        # Update the state of the job to an error
+        trial['state'] = JOB_STATE_ERROR
+        # Upsert the job into mongodb
+        self._mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
+        counter = counter + 1
+        return counter
 
     @staticmethod
     def _get_current_timeout_boundary(timeout_interval):
@@ -62,20 +69,3 @@ class MongodbTrialsTimeoutMonitor:
         :return: datetime.datetime(<Ageout time>)
         """
         return coarse_utcnow() - datetime.timedelta(minutes=timeout_interval)
-
-    @staticmethod
-    def _log_warning_of_error(obj_id, trial_id, owner):
-        """
-        Log an error when a job is stale
-        :param obj_id: The ID of the relevant object in the mongoDB
-        :param trial_id: Hyperopt Trial ID for this stale trail
-        :param owner: Location of stale trial, including the pod name and pid
-        :return:
-        """
-        warning_detail = ('obj_id : ' + str(obj_id) +
-                          ":::: trial id : " + str(trial_id) +
-                          ":::: Owner [pod_name, pid] : " + str(owner))
-
-        log.warning("Forcing Job to error state due to timeout: \n" + warning_detail)
-
-
