@@ -66,8 +66,7 @@ class HyperoptMonitor:
     """Instantiation and starting of the hyperopt monitoring tool"""
 
     def __init__(self, config):
-
-        self.args = args
+        self.config = config
         log.info("Starting Monitor")
         self.start_monitoring()
 
@@ -76,10 +75,10 @@ class HyperoptMonitor:
         Initalisation of long running job to monitor for stale hyperopt jobs
         :return: None
         """
-        mongodb_connection = MongodbConnection(self.args.mongo_db_address,
-                                               int(self.args.mongo_db_port),
-                                               self.args.trials_db,
-                                               self.args.trials_collection)
+        mongodb_connection = MongodbConnection(self.config.mongo_db_address,
+                                               int(self.config.mongo_db_port),
+                                               self.config.trials_db,
+                                               self.config.trials_collection)
 
         hyperopt_timeout_monitor = MongodbTrialsTimeoutMonitor(float(self.config.timeout_interval),
                                                                float(self.config.update_interval),
