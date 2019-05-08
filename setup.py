@@ -11,7 +11,6 @@ setup(
     entry_points={
         'console_scripts': [
             'hyperkops-monitor=hyperkops.hyperopt_monitor:main_monitor'
-
         ]},
     install_requires=[
         'hyperopt==0.1.2',
