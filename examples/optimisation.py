@@ -88,7 +88,8 @@ trials = MongoTrials(mongo_api_address, exp_key=exp_key)
 def objective_currier(multiplier):
     """
     The objective function gets curried and passed to the trials object with the data loaded
-    :return: curried objective function
+    :param multiplier: float uses to scale the objective function
+    :return: objective funciton
     """
 
     def objective_curried(args):
