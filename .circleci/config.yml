@@ -130,12 +130,6 @@ jobs:
       - checkout
       - *save_repo
       - setup_remote_docker
-      - *yarn_restore_cache
-      - *install_makefile
-      - run:
-          name: copy ssh keys to project folder
-          command: cp -r ~/.ssh ~/project/
-      - run: sudo -E make tools/install-ecr-helper
       - run:
           name: Build Docker Image
           command: |
@@ -144,54 +138,49 @@ jobs:
             set +o errexit    # always exit on error
             set +o pipefail   # dont ignore exit codes when piping output
 
-            # setting variables that can be overwritten by env vars
-            DOCKER_REGISTRIES="${DOCKER_REGISTRIES:=855460960717.dkr.ecr.ap-southeast-2.amazonaws.com}"
-            DOCKER_REPOSITORY="${DOCKER_REPOSITORY:=${CIRCLE_PROJECT_USERNAME}}"
-            DOCKER_IMAGE="${CIRCLE_PROJECT_REPONAME:=${CIRCLE_PROJECT_REPONAME}}"
+            function build_docker_image(){
+                echo "Building dockerfile at path $1"
+                # Setup all docker args from local env vars
+                docker_arg=$(grep -c ARG Dockerfile)
+                build_args=""
+                if [ "${docker_arg}" -gt 0 ]; then
+                    echo "we need to add build-args"
+                    echo "arg name needs to match env var name"
 
-            gitsha1=$(git rev-parse HEAD | cut -c1-7)
+                    # Dockerfile ARG can be formatted in multiple ways, handling all edge cases
+                    arg_keys=$(grep ARG Dockerfile | cut -d ' ' -f2 | cut -d ' ' -f1 | cut -d '=' -f1)
 
-            # setting global variables
-            build_args=""
-            docker_tags=(${gitsha1} ${CIRCLE_BRANCH} ${CIRCLE_TAG})
-            docker_tags+=($(test ! -z "${CIRCLE_BRANCH}" && echo "branch.${CIRCLE_BRANCH}-${gitsha1}"))
-            docker_tags+=($(test ! -z "${CIRCLE_TAG}" && echo "tag.${CIRCLE_TAG}"))
-            docker_tags+=($(test ! -z "${CIRCLE_BUILD_NUM}" && echo "build.${CIRCLE_BUILD_NUM}"))
-            docker_tags+=($(test ! -z "${CIRCLE_USERNAME}" && echo "user.${CIRCLE_USERNAME}"))
-            docker_tags+=("master.$([[ ${CIRCLE_BRANCH} == "master" ]] && echo "true" || echo "false")-${gitsha1}")
+                    for arg_key in ${arg_keys}; do
+                    build_args="${build_args} --build-arg ${arg_key}=\${${arg_key}}"
+                    done
+                fi
+                echo "run docker build"
+                eval "$(printf "docker build %s -t magic - < $1", "${build_args}")"
+            }
 
-            echo "run docker build"
+            function publish_image(){
+                echo "publishing image to docker hub repo $1"
+                # Setup tags
+                gitsha1=$(git rev-parse HEAD | cut -c1-7)
 
-            docker_arg=$(grep -c ARG Dockerfile)
-            if [ ${docker_arg} -gt 0 ]; then
-              echo "we need to add build-args"
-              echo "arg name needs to match env var name"
+                docker_tags=("${gitsha1}" "${CIRCLE_BRANCH}" "${CIRCLE_TAG}")
+                docker_tags+=("$(test ! -z "${CIRCLE_BRANCH}" && echo "branch.${CIRCLE_BRANCH}-${gitsha1}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_TAG}" && echo "tag.${CIRCLE_TAG}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_BUILD_NUM}" && echo "build.${CIRCLE_BUILD_NUM}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_USERNAME}" && echo "user.${CIRCLE_USERNAME}")")
+                docker_tags+=("master.$([[ ${CIRCLE_BRANCH} == "master" ]] && echo "true" || echo "false")-${gitsha1}")
 
-              # Dockerfile ARG can be formatted in multiple ways, handling all edge cases
-              arg_keys=$(grep ARG Dockerfile | cut -d ' ' -f2 | cut -d ' ' -f1 | cut -d '=' -f1)
+                registry_path="hipages/$1"
 
-              for arg_key in ${arg_keys}; do
-                build_args="${build_args} --build-arg ${arg_key}=\${${arg_key}}"
-              done
-            fi
+                for docker_tag in "${docker_tags[@]}"; do
+                    docker tag magic "${registry_path}:${docker_tag}"
+                    echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin docker push "${registry_path}:${docker_tag}"
+                done
+            }
 
-            eval $(echo "docker build ${build_args} -t magic .")
 
-            for docker_registry in ${DOCKER_REGISTRIES}; do
-
-              registry_path="${DOCKER_REPOSITORY}/${DOCKER_IMAGE}"
-
-              if [ "${docker_registry}" != "docker" ]; then
-                registry_path="${docker_registry}/${registry_path}"
-              fi
-
-              for docker_tag in ${docker_tags[@]}; do
-                docker tag magic ${registry_path}:${docker_tag}
-                docker push ${registry_path}:${docker_tag}
-              done
-
-            done
-
+            build_docker_image "./Dockerfile"
+            publish_image "hyperkops"
 
   k8s_deploy:
     docker:
