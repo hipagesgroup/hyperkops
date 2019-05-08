@@ -155,7 +155,8 @@ jobs:
                     done
                 fi
                 echo "run docker build"
-                eval "$(printf "docker build %s -t magic - < $1" "${build_args}")"
+                cd $1
+                eval "$(printf "docker build %s -t magic ." "${build_args}")"
             }
 
             function publish_image(){
