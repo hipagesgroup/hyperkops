@@ -155,7 +155,8 @@ jobs:
                     done
                 fi
                 echo "run docker build"
-                eval "$(printf "docker build %s -t magic - < $1", "${build_args}")"
+                cd $1
+                eval "$(printf "docker build %s -t magic ." "${build_args}")"
             }
 
             function publish_image(){
@@ -172,14 +173,15 @@ jobs:
 
                 registry_path="hipages/$1"
 
-                for docker_tag in "${docker_tags[@]}"; do
-                    docker tag magic "${registry_path}:${docker_tag}"
-                    echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin docker push "${registry_path}:${docker_tag}"
+                for docker_tag in ${docker_tags[@]}; do
+                    echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin && \
+                    docker tag magic "${registry_path}:${docker_tag}" && \
+                    echo docker push "${registry_path}:${docker_tag}"
                 done
             }
 
 
-            build_docker_image "./Dockerfile"
+            build_docker_image "."
             publish_image "hyperkops"
 
   k8s_deploy:
