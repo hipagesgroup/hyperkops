@@ -1,3 +1,5 @@
+# This script executes an example workload on the kubenetes infrastructure.
+
 import argparse
 import logging as log
 import os
