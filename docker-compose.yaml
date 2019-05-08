@@ -5,7 +5,8 @@ services:
     ports:
       - 27017:27017
   monitor:
-    image: hyperkops/timer:v0
+    build:
+      context: ./
     environment:
       MONGO_DB_PORT: 27017
       MONGO_DB_ADDRESS: mongo
@@ -15,3 +16,24 @@ services:
       UPDATE_INTERVAL: 1
       PYTHONUNBUFFERED: 0
       LOGLEVEL: INFO
+  workload:
+    build:
+      context: ./examples/
+    environment:
+      MONGO_DB_PORT: 27017
+      MONGO_DB_ADDRESS: mongo
+      TRIALS_DB: model_db
+      TRIALS_COLLECTION: jobs
+      PYTHONUNBUFFERED: 0
+      NUM_EVAL_STEPS: 10
+      MULTIPLIER: 10
+      HYPEROPT_EXP_KEY: 100
+  worker:
+    build:
+      context: ./hyperkops/worker/
+    image: hyperkops/worker:v0
+    environment:
+      MONGO_DB_PORT: 27017
+      MONGO_DB_ADDRESS: mongo
+      TRIALS_DB: model_db
+      PYTHONUNBUFFERED: 0
