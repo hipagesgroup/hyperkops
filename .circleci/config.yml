@@ -179,7 +179,7 @@ jobs:
             }
 
 
-            build_docker_image "./Dockerfile"
+            build_docker_image "."
             publish_image "hyperkops"
 
   k8s_deploy:
