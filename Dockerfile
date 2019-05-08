@@ -9,6 +9,3 @@ COPY hyperkops ${HYPERKOPS_HOME}/hyperkops
 COPY setup.py setup.py
 
 RUN python ${HYPERKOPS_HOME}/setup.py install
-
-ENTRYPOINT hyperkops-monitor
-

@@ -15,3 +15,22 @@ services:
       UPDATE_INTERVAL: 1
       PYTHONUNBUFFERED: 0
       LOGLEVEL: INFO
+    command: ["hyperkops-monitor"]
+  workload:
+    image: hyperkops/example:v0
+    environment:
+      MONGO_DB_PORT: 27017
+      MONGO_DB_ADDRESS: mongo
+      TRIALS_DB: model_db
+      TRIALS_COLLECTION: jobs
+      PYTHONUNBUFFERED: 0
+      NUM_EVAL_STEPS: 10
+      MULTIPLIER: 10
+      HYPEROPT_EXP_KEY: 100
+  worker:
+    image: hyperkops/worker:v0
+    environment:
+      MONGO_DB_PORT: 27017
+      MONGO_DB_ADDRESS: mongo
+      TRIALS_DB: model_db
+      PYTHONUNBUFFERED: 0
