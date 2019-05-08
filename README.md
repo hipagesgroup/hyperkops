@@ -21,3 +21,6 @@ This repository produces the docker image that can be used in the hyperopt helm 
 
 # Stru
 
+This repository prioduces the docker image that can be used in the hyperopt helm chart as the job monitor component.
+
+Also, publishes images to docker hub.
