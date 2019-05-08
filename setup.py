@@ -10,8 +10,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'hyperkops-monitor=hyperkops.hyperopt_monitor:main_monitor',
-            'hyperkops-example=hyperkops.examples.optimisation:main_example',
+            'hyperkops-monitor=hyperkops.hyperopt_monitor:main_monitor'
 
         ]},
     install_requires=[
