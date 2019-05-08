@@ -15,7 +15,6 @@ services:
       UPDATE_INTERVAL: 1
       PYTHONUNBUFFERED: 0
       LOGLEVEL: INFO
-    command: ["hyperkops-monitor"]
   workload:
     image: hyperkops/example:v0
     environment:
