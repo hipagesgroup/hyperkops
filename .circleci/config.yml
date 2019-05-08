@@ -174,7 +174,7 @@ jobs:
                 registry_path="hipages/$1"
 
                 for docker_tag in ${docker_tags[@]}; do
-                    echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin && \
+                    echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin && \
                     docker tag magic "${registry_path}:${docker_tag}" && \
                     echo docker push "${registry_path}:${docker_tag}"
                 done
