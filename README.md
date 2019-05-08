@@ -16,11 +16,10 @@ This repository produces the docker image that can be used in the hyperopt helm 
 
 * Worker: Hyperopt worker pod
 * MongoDB: MongoDB Instance
-* Stale Job Timer: 
+* Stale Job Timer
 
 
 # Stru
 
-This repository prioduces the docker image that can be used in the hyperopt helm chart as the job monitor component.
 
 Also, publishes images to docker hub.
