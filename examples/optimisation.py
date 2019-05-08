@@ -18,6 +18,8 @@ def environ_or_required(key):
         return {'required': True}
 
 
+# The settings for the example can either be provided from command line, or loaded from
+# the relevant environmental variables
 parser = argparse.ArgumentParser()
 parser.add_argument("-d",
                     "--mongo_db_address",
@@ -73,18 +75,25 @@ mongo_api_address = "%s://%s:%s/%s/%s" % \
                      trials_db,
                      trials_collection)
 
+## Hyperopt settings
 num_eval_steps = int(config.num_eval_steps)
-multiplier = float(config.multiplier)
 
+# Set up the search space for hyperopt to scan over
 space = hp.choice('a',
                   [('case 1', 1 + hp.lognormal('c1', 0, 1)),
                    ('case 2', hp.uniform('c2', -10, 10))])
 
-"Initalise the trials object which stores the current state of the optimisation"
+# Extract Multiplier (used in objective function)
+multiplier = float(config.multiplier)
+
+# Assign a random exp_key so that there is no confusion between trials
 exp_key = str(uuid.uuid4())
+
+# Initialise the trials object which enables connection to the MongoDb
 trials = MongoTrials(mongo_api_address, exp_key=exp_key)
 
 
+# Curry function so that multiplier is included with the function
 def objective_currier(multiplier):
     """
     The objective function gets curried and passed to the trials object with the data loaded
@@ -104,6 +113,7 @@ def objective_currier(multiplier):
 
 object_curried = objective_currier(multiplier)
 
+# Run optimisation
 best = fmin(fn=object_curried,
             space=space,
             algo=tpe.suggest,
@@ -111,6 +121,7 @@ best = fmin(fn=object_curried,
             trials=trials,
             verbose=1)
 
+# Get the values of the best space
 best_space = space_eval(space, best)
 
-log.info("Best value in optimsation is : " + str(best_space))
+log.info("Best value in optimisation is : " + str(best_space))
