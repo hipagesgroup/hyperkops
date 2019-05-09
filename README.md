@@ -3,21 +3,21 @@
 This repo provides components which enable a stable infrastructure to be created which allows
 the hyperopt library to be exploited in kubernetes. 
 
-
 # Architecture in kubernetes
 
 The extra components outlined here are required for deployment of Hyperopt in kubernetes because 
-Hyperopt is designed around graceful failure of the worker units would allows them to emit an error signal
-when a trial has failed. If a worker fails through a python exception it emits a shutdown failure message to mongodb, 
-and sets all of it current jobs to a failed state. In kubernetes, if a pod gets killed (which can happen when a pod
-gets deleted or rotated to a different underlying instance) python won't emit this error signal,
-and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. This monitor helps out Hyperopt by identifying jobs which 
-fit this category of killed jobs, and updates the relevant MongoDB record, allowing the optimisation to finish.  
+Hyperopt is designed around graceful failure of the worker units. In such a stable system if a worker fails through 
+a python exception it emits a shutdown failure message to mongodb, and sets all of it current jobs to a failed state. 
+In kubernetes, if a pod gets killed (which can happen when a pod gets deleted or rotated to a different underlying 
+instance) python won't emit this error signal, and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. 
+This monitor helps out Hyperopt by identifying jobs which fit this category of killed jobs, and updates the relevant 
+MongoDB record, allowing the optimisation to finish.  
 
+![ScreenShot](./img/architecture.png)
 
 The hyperkops architecture is composed of three main components:
 
-* Worker: Hyperopt worker 
+* Hyperkops Worker: Hyperopt worker
 * Hyperkops Monitor: Identifies and updates hyperopt trials which have ran beyond a timeout limit
 * MongoDB: MongoDB Instance
 
@@ -57,13 +57,9 @@ Example start command:
 The hyperkops worker starts a hyperopt worker thread, inhertiting any command line arguments it requires from
 suitably named environmental variables. In order to maintain the addressing convention to the MongoDB set out within
 other hyperkops components, the MongoDB address is set using the specified environmental variables, whilst other
-hyperopt-worker configurations can be set by using the naming convention HYPEROPT_<COMMAND LINE ARGUMENT NAME>. 
-Examples are provided below but please refer to the hyperopt library itself for a comprehensive list of options[https://github.com/hyperopt/hyperopt/blob/master/hyperopt/mongoexp.py]. 
-
-
-Note that address for MongoDB, and the relevant trials DB, are the exception to the 
-other command line options use the naming convention HYPEROPT_<COMMAND LINE ARGUMENT NAME>, examples are provided below 
-but please refer to the hyper opt library itself for a comprehensive list of options. 
+hyperopt-worker configurations can be set by using the naming convention 
+`HYPEROPT_<COMMAND LINE ARGUMENT NAME IN UPPER CASE>`. Examples are provided below but please refer
+ to the hyperopt library itself for a comprehensive list of  [options](https://github.com/hyperopt/hyperopt/blob/master/hyperopt/mongoexp.py). 
 
 | Environmental Variable | Description | Default Value| 
 |----------------------|:-----------:|------------:|
@@ -80,6 +76,5 @@ Example Hyeropt Worker commands:
 
 Example start command:
 ```> sh ./hyperkops/worker/kube_worker.sh```
-
 
 
