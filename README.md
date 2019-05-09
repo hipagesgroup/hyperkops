@@ -1,7 +1,9 @@
 # Hyperkops
 
 This repo provides components which enable a stable infrastructure to be created which allows
-the hyperopt library to be exploited in kubernetes.  These extra components are required in kubernetes because  
+the hyperopt library to be exploited in kubernetes. 
+
+The extra components outlined here are required for deployment of Hyperopt in kubernetes because 
 Hyperopt is designed around graceful failure of the worker units would allows them to emit an error signal
 when a trial has failed. If a worker fails through a python exception it emits a shutdown failure message to mongodb, 
 and sets all of it current jobs to a failed state. In kubernetes, if a pod gets killed (which can happen when a pod
@@ -9,21 +11,29 @@ gets deleted or rotated to a different underlying instance) python won't emit th
 and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. This monitor helps out Hyperopt by identifying jobs which 
 fit this category of killed jobs, and updates the relevant MongoDB record, allowing the optimisation to finish.  
 
-This repository produces the docker image that can be used in the hyperopt helm chart as the job monitor component.
+Docker images with these components pre-installed can be found here:
+
+An example helm chart can be found here:
+
 
 # Architecture in kubernetes
+The hyperkops architecture is composed of three main components:
 
-* Worker: Hyperopt worker pod
+* Worker: Hyperopt worker 
+* Hyperkops Monitor: Identifies and updates hyperopt trials which have ran beyond a timeout limit
 * MongoDB: MongoDB Instance
-* Hyperkops Monitor: Upserts 'stale' jobs in MongoDB to flag them as in an Error state 
 
-# Installing Hyperkops Monitor
+# Hyperkops Monitor
+The Hyperops monitor looks for jobs which have been longer than a specified time and uUpserts the relevant records
+ in MongoDB to flag them as in an Error state. 
+
+## Installing Hyperkops Monitor
 This repo is not yet available in the PyPi repository so installation from github using pip is reccomended.
 The library is installed using pip by calling: 
 
 `pip install git+https://github.com/<REPO ADDRESS HERE>`
 
-# Starting Hyperkops Monitor
+## Starting Hyperkops Monitor
 
 After installation with pip the monitor can be started from command line, with the arguments either provided within the
 command line arguments or they are inherited from environmental variables. 
