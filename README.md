@@ -4,9 +4,6 @@ This repo provides components which enable a stable infrastructure to be created
 the hyperopt library to be exploited in kubernetes. 
 
 
-
-
-
 # Architecture in kubernetes
 
 The extra components outlined here are required for deployment of Hyperopt in kubernetes because 
@@ -53,7 +50,7 @@ command line arguments or they are inherited from environmental variables.
 |update_interval |UPDATE_INTERVAL | Time between queries to the MongoDb to find failed jobs | 100| 
 
 Example start command:
-`> hyperkops-monitor --mongo_db_address localhost --mongo_db_port 27017 --trials_db model_db --trials_collection jobs --`
+```> hyperkops-monitor --mongo_db_address localhost --mongo_db_port 27017 --trials_db model_db --trials_collection jobs```
 
 
 # Hyperkops Worker
@@ -82,7 +79,7 @@ Example Hyeropt Worker commands:
 | HYPEROPT_LAST_JOB_TIMEOUT| --last-job-timeout | Do not reserve a job after T seconds have passed | None |
 
 Example start command:
-`> sh ./hyperkops/worker/kube_worker.sh`
+```> sh ./hyperkops/worker/kube_worker.sh```
 
 
 
