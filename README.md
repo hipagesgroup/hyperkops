@@ -3,6 +3,12 @@
 This repo provides components which enable a stable infrastructure to be created which allows
 the hyperopt library to be exploited in kubernetes. 
 
+
+
+
+
+# Architecture in kubernetes
+
 The extra components outlined here are required for deployment of Hyperopt in kubernetes because 
 Hyperopt is designed around graceful failure of the worker units would allows them to emit an error signal
 when a trial has failed. If a worker fails through a python exception it emits a shutdown failure message to mongodb, 
@@ -11,17 +17,16 @@ gets deleted or rotated to a different underlying instance) python won't emit th
 and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. This monitor helps out Hyperopt by identifying jobs which 
 fit this category of killed jobs, and updates the relevant MongoDB record, allowing the optimisation to finish.  
 
-Docker images with these components pre-installed can be found here:
 
-An example helm chart can be found here:
-
-
-# Architecture in kubernetes
 The hyperkops architecture is composed of three main components:
 
 * Worker: Hyperopt worker 
 * Hyperkops Monitor: Identifies and updates hyperopt trials which have ran beyond a timeout limit
 * MongoDB: MongoDB Instance
+
+Docker images with these components pre-installed can be found here:
+
+An example helm chart can be found here:
 
 # Hyperkops Monitor
 The Hyperops monitor looks for jobs which have been longer than a specified time and uUpserts the relevant records
