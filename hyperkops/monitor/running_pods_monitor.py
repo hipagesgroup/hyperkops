@@ -1,3 +1,4 @@
+import logging as log
 from collections import Counter
 
 from hyperopt import JOB_STATE_RUNNING, JOB_STATE_ERROR
@@ -34,22 +35,31 @@ class PodMonitor:
         :param query_results: list of dictionaries of the currently running trials
         :return: None
         """
+        counter = 0
         for trial in query_results:
             if self.get_pod_name_from_owner_string(trial['owner'][0]) in list(deleted_pods):
                 trial['state'] = JOB_STATE_ERROR
+                log.debug("Trial deleted from MongoDB owner = " + str(trial['owner'][0]))
                 # Upsert the job into mongodb
                 self.mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
+                counter += 1
 
+        log.info("Number of stale jobs detected : " + str(counter))
     def get_pods_running_trials(self, query_results):
         """
         Uses the results to find the unique names of pods running trials
         :param query_results: List of dictionaries, each dictionary is a running trial
         :return: list of string pod names
         """
+
+        log.debug("Running Trials ::")
+
         owner_counters = Counter()
         for trial in query_results:
             owner_counters[self.get_pod_name_from_owner_string(trial['owner'][0])] += 1
+            log.debug(trial)
         pods_running_trials = list(owner_counters.keys())
+
         return pods_running_trials
 
     @staticmethod
