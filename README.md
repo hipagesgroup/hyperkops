@@ -54,7 +54,7 @@ Example start command:
 
 
 # Hyperkops Worker
-The hyperkops worker starts a hyperopt worker thread, inhertiting any command line arguments it requires from
+The Hyperkops worker starts a hyperopt worker thread, inheriting any command line arguments it requires from
 suitably named environmental variables. In order to maintain the addressing convention to the MongoDB set out within
 other hyperkops components, the MongoDB address is set using the specified environmental variables, whilst other
 hyperopt-worker configurations can be set by using the naming convention 
