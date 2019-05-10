@@ -44,7 +44,7 @@ command line arguments or they are inherited from environmental variables.
 | -------------------- |:----------------------:|:-----------:|------------:|
 |mongo_db_address | MONGO_DB_ADDRESS | url to MongoDB | localhost | 
 |mongo_db_port | MONGO_DB_PORT| mongo db port | 27017| 
-|trials_db | TRIALS_DB | Name of the Mongo Database in which the trials are stored | model_db| 
+|trials_db | TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db| 
 |trials_collection | TRIALS_COLLECTION | Name of the Mongo Collection in which the trials are stored | jobs| 
 |timeout_interval |TIMEOUT_INTERVAL | Maximum length of time (in seconds) for a job to run before it is considered failed | 1000| 
 |update_interval |UPDATE_INTERVAL | Time between queries to the MongoDb to find failed jobs | 100| 
