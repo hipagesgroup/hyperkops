@@ -47,7 +47,7 @@ command line arguments or they are inherited from environmental variables.
 |trials_db | TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db| 
 |trials_collection | TRIALS_COLLECTION | Name of the Mongo Collection in which the trials are stored | jobs| 
 |timeout_interval |TIMEOUT_INTERVAL | Maximum length of time (in seconds) for a job to run before it is considered failed | 1000| 
-|update_interval |UPDATE_INTERVAL | Time between queries to the MongoDb to find failed jobs | 100| 
+|update_interval |UPDATE_INTERVAL | Time between queries to the MongoDB to find failed jobs | 100| 
 
 Example start command:
 ```> hyperkops-monitor --mongo_db_address localhost --mongo_db_port 27017 --trials_db model_db --trials_collection jobs```
