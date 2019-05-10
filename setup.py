@@ -16,5 +16,6 @@ setup(
         'hyperopt==0.1.2',
         'dill==0.2.9',
         'pymongo==3.8.0',
-        'python-dateutil==2.8.0']
+        'python-dateutil==2.8.0',
+        'kubernetes==9.0.0']
 )
