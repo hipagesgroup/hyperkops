@@ -1,9 +1,13 @@
 from collections import Counter
 
+from hyperopt import JOB_STATE_RUNNING, JOB_STATE_ERROR
+
 
 class PodMonitor:
 
-    def __init__(self, kube_connector, mongodb_connection):
+    def __init__(self,
+                 kube_connector,
+                 mongodb_connection):
 
         self.kube_api_connector = kube_connector
         self._mongodb_connection = mongodb_connection
@@ -30,7 +34,7 @@ class PodMonitor:
         """
         for trial in query_results:
             if self.get_pod_name_from_owner_string(trial['owner'][0]) in list(deleted_pods):
-                trial['state'] = 2
+                trial['state'] = JOB_STATE_ERROR
                 # Upsert the job into mongodb
                 self._mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
 
@@ -60,4 +64,4 @@ class PodMonitor:
         Query the MongoDB to find running trials
         :return: list of dictrionaries for the running trials
         """
-        return [trial for trial in self._mongodb_connection.collection.find({'state': 1})]
+        return [trial for trial in self._mongodb_connection.collection.find({'state': JOB_STATE_RUNNING})]

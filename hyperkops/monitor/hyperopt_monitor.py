@@ -1,9 +1,11 @@
 import argparse
 import logging as log
 import os
+from time import sleep
 
+from hyperkops.monitor.kube_utils import KubeUtil
 from hyperkops.monitor.mongo_db_utils import MongodbConnection
-from hyperkops.monitor.trials_timeout_monitor import MongodbTrialsTimeoutMonitor
+from hyperkops.monitor.running_pods_monitor import PodMonitor
 
 log.basicConfig(level=os.environ.get('LOGLEVEL', 'WARNING').upper())
 
@@ -45,17 +47,18 @@ def main_monitor():
                         metavar='str',
                         help="Name of the Mongo Collection in which the trials are stored")
 
-    parser.add_argument("-i", "--timeout_interval",
-                        dest='timeout_interval',
-                        **environ_or_required("TIMEOUT_INTERVAL"),
-                        metavar='float',
-                        help="Maximum length of time (in seconds) for a job to run before it is considered failed")
-
     parser.add_argument("-u", "--update_interval",
                         dest='update_interval',
                         **environ_or_required("UPDATE_INTERVAL"),
                         metavar='float',
                         help="Time between queries to the MongoDb to find failed jobs")
+
+    parser.add_argument("-n", "--namespace",
+                        dest='update_interval',
+                        **environ_or_required("NAMESPACE"),
+                        metavar='float',
+                        help="Time between queries to the MongoDb to find failed jobs")
+
 
     args = parser.parse_args()
 
@@ -80,8 +83,11 @@ class HyperoptMonitor:
                                                self.config.trials_db,
                                                self.config.trials_collection)
 
-        hyperopt_timeout_monitor = MongodbTrialsTimeoutMonitor(float(self.config.timeout_interval),
-                                                               float(self.config.update_interval),
-                                                               mongodb_connection)
+        kube_api_connector = KubeUtil(namespace=self.config.namespace)
 
-        hyperopt_timeout_monitor.monitor_for_stale_jobs()
+        pod_monitor = PodMonitor(kube_api_connector, mongodb_connection)
+
+        while True:
+            pod_monitor.remove_dead_trials()
+
+            sleep(self._update_interval)
