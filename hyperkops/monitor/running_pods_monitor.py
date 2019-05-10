@@ -7,10 +7,12 @@ class PodMonitor:
 
     def __init__(self,
                  kube_connector,
-                 mongodb_connection):
+                 mongodb_connection,
+                 selector):
 
         self.kube_api_connector = kube_connector
-        self._mongodb_connection = mongodb_connection
+        self.mongodb_connection = mongodb_connection
+        self.selector = selector
 
     def remove_dead_trials(self):
         """
@@ -18,7 +20,7 @@ class PodMonitor:
         in MongoDB as failed
         :return: None
         """
-        running_pods = self.kube_api_connector.get_running_pods()
+        running_pods = self.kube_api_connector.get_running_pods(self.selector)
         query_results = self.get_running_trials()
         pods_running_trials = self.get_pods_running_trials(query_results)
         deleted_pods = set(pods_running_trials) - set(running_pods)
@@ -36,7 +38,7 @@ class PodMonitor:
             if self.get_pod_name_from_owner_string(trial['owner'][0]) in list(deleted_pods):
                 trial['state'] = JOB_STATE_ERROR
                 # Upsert the job into mongodb
-                self._mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
+                self.mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
 
     def get_pods_running_trials(self, query_results):
         """
@@ -64,4 +66,4 @@ class PodMonitor:
         Query the MongoDB to find running trials
         :return: list of dictrionaries for the running trials
         """
-        return [trial for trial in self._mongodb_connection.collection.find({'state': JOB_STATE_RUNNING})]
+        return [trial for trial in self.mongodb_connection.collection.find({'state': JOB_STATE_RUNNING})]

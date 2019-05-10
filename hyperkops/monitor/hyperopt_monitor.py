@@ -54,11 +54,16 @@ def main_monitor():
                         help="Time between queries to the MongoDb to find failed jobs")
 
     parser.add_argument("-n", "--namespace",
-                        dest='update_interval',
+                        dest='namespace',
                         **environ_or_required("NAMESPACE"),
                         metavar='float',
                         help="Time between queries to the MongoDb to find failed jobs")
 
+    parser.add_argument("-s", "--selector",
+                        dest='selector',
+                        **environ_or_required("SELECTOR"),
+                        metavar='float',
+                        help="Time between queries to the MongoDb to find failed jobs")
 
     args = parser.parse_args()
 
@@ -72,6 +77,7 @@ class HyperoptMonitor:
         self.config = config
         log.info("Starting Monitor")
         self.start_monitoring()
+        self.update_interval = float(config.update_interval)
 
     def start_monitoring(self):
         """
@@ -85,9 +91,11 @@ class HyperoptMonitor:
 
         kube_api_connector = KubeUtil(namespace=self.config.namespace)
 
-        pod_monitor = PodMonitor(kube_api_connector, mongodb_connection)
+        pod_monitor = PodMonitor(kube_api_connector,
+                                 mongodb_connection,
+                                 self.config.selector)
 
         while True:
             pod_monitor.remove_dead_trials()
 
-            sleep(self._update_interval)
+            sleep(self.update_interval)
