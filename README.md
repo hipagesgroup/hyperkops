@@ -42,7 +42,7 @@ command line arguments or they are inherited from environmental variables.
 
 |Command Line Argument | Environmental Variable | Description | Default Value| 
 | -------------------- |:----------------------:|:-----------:|------------:|
-|mongo_db_address | MONGO_DB_ADDRESS | url to monogo db | localhost | 
+|mongo_db_address | MONGO_DB_ADDRESS | url to MongoDB | localhost | 
 |mongo_db_port | MONGO_DB_PORT| mongo db port | 27017| 
 |trials_db | TRIALS_DB | Name of the Mongo Database in which the trials are stored | model_db| 
 |trials_collection | TRIALS_COLLECTION | Name of the Mongo Collection in which the trials are stored | jobs| 
