@@ -5,7 +5,7 @@ the hyperopt library to be exploited in kubernetes.
 
 # Architecture in kubernetes
 
-The extra components outlined here are required for deployment of Hyperopt in kubernetes because 
+The extra components outlined here are required for deployment of hyperopt in Kubernetes because 
 Hyperopt is designed around graceful failure of the worker units. In such a stable system if a worker fails through 
 a python exception it emits a shutdown failure message to mongodb, and sets all of it current jobs to a failed state. 
 In kubernetes, if a pod gets killed (which can happen when a pod gets deleted or rotated to a different underlying 
