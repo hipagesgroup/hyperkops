@@ -15,7 +15,7 @@ MongoDB record, allowing the optimisation to finish.
 
 ![ScreenShot](./img/architecture.png)
 
-The hyperkops architecture is composed of three main components:
+The hyperkops architecture is comprised of three main components:
 
 * Hyperkops Worker: Hyperopt worker
 * Hyperkops Monitor: Identifies and updates hyperopt trials which have ran beyond a timeout limit
