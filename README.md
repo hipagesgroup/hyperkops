@@ -1,6 +1,6 @@
 # Hyperkops
 
-This repo provides components which enable a stable infrastructure to be created which allows
+This repository provides components which enable a stable infrastructure to be created which allows
 the hyperopt library to be exploited in kubernetes. 
 
 # Architecture in kubernetes
