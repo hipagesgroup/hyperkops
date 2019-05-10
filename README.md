@@ -30,7 +30,7 @@ The Hyperops monitor looks for jobs which have been longer than a specified time
  in MongoDB to flag them as in an `Error` state. 
 
 ## Installing Hyperkops Monitor
-This repo is not yet available in the PyPi repository so installation from github using pip is reccomended.
+This repository is not yet available in the PyPI repository so installation from github using pip is recommended.
 The library is installed using pip by calling: 
 
 `pip install git+https://github.com/<REPO ADDRESS HERE>`
