@@ -16,7 +16,7 @@ trials_db=${TRIALS_DB:-model_db}
 mongo_db_full_qualified_address="${mongo_db_address}:${mongo_db_port}/${TRIALS_DB}"
 
 echo "MongoDB Adderss ${mongo_db_full_qualified_address}"
-## Create string of argument using the environmental variables
+## Create a string of arguments using the environmental variables
 argument_string="hyperopt-mongo-worker --mongo ${mongo_db_full_qualified_address} "
 
 for var in "${!HYPEROPT_@}"; do
