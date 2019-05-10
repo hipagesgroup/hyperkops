@@ -27,7 +27,7 @@ An example helm chart can be found here:
 
 # Hyperkops Monitor
 The Hyperops monitor looks for jobs which have been longer than a specified time and uUpserts the relevant records
- in MongoDB to flag them as in an Error state. 
+ in MongoDB to flag them as in an `Error` state. 
 
 ## Installing Hyperkops Monitor
 This repo is not yet available in the PyPi repository so installation from github using pip is reccomended.
