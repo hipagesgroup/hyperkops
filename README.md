@@ -67,7 +67,7 @@ hyperopt-worker configurations can be set by using the naming convention
 | MONGO_DB_PORT| mongo db port | 27017| 
 | TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db|
 
-Example Hyeropt Worker commands:
+Example Hyperopt Worker commands:
 
 | Environmental Variable | Corresponding Hyperopt Command | Description | Default Value| 
 |----------------------|:--------------------------------:|:----------:|------------:|
