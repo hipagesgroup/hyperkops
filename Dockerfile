@@ -7,6 +7,7 @@ WORKDIR ${HYPERKOPS_HOME}
 COPY hyperkops ${HYPERKOPS_HOME}/hyperkops
 COPY setup.py setup.py
 
+RUN pip install --upgrade pip
 RUN python ${HYPERKOPS_HOME}/setup.py install
 
 ENTRYPOINT hyperkops-monitor
