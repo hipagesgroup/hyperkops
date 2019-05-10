@@ -65,7 +65,7 @@ hyperopt-worker configurations can be set by using the naming convention
 |----------------------|:-----------:|------------:|
 | MONGO_DB_ADDRESS | url to monogo db | localhost | 
 | MONGO_DB_PORT| mongo db port | 27017| 
-| TRIALS_DB | Name of the Mongo Database in which the trials are stored | model_db|
+| TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db|
 
 Example Hyeropt Worker commands:
 
