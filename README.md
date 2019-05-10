@@ -38,7 +38,7 @@ The library is installed using pip by calling:
 ## Starting Hyperkops Monitor
 
 After installation with pip, the Monitor can be started from the command line. The arguments can either be provided within the
-command line arguments or they are inherited from environmental variables. 
+command line arguments or they can be inherited from environmental variables. 
 
 |Command Line Argument | Environmental Variable | Description | Default Value| 
 | -------------------- |:----------------------:|:-----------:|------------:|
