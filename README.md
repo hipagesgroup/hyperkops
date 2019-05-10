@@ -71,7 +71,7 @@ Example Hyperopt Worker commands:
 
 | Environmental Variable | Corresponding Hyperopt Command | Description | Default Value| 
 |----------------------|:--------------------------------:|:----------:|------------:|
-| HYPEROPT_EXP_KEY| --exp-key | identifier for this workers's jobs | None |
+| HYPEROPT_EXP_KEY| --exp-key | identifier for this worker's jobs | None |
 | HYPEROPT_LAST_JOB_TIMEOUT| --last-job-timeout | Do not reserve a job after T seconds have passed | None |
 
 Example start command:
