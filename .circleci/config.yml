@@ -139,7 +139,7 @@ jobs:
             set +o pipefail   # dont ignore exit codes when piping output
 
             function build_docker_image(){
-                echo "Building dockerfile at path $1 for the image $2"
+                echo "Building dockerfile at path $1"
                 # Setup all docker args from local env vars
                 docker_arg=$(grep -c ARG Dockerfile)
                 build_args=""
@@ -155,8 +155,8 @@ jobs:
                     done
                 fi
                 echo "run docker build"
-                cd $1
-                eval "$(printf "docker build %s -t $2 ." "${build_args}")"
+                cd "$1"
+                eval "$(printf "docker build %s -t magic ." "${build_args}")"
             }
 
             function publish_image(){
@@ -166,28 +166,23 @@ jobs:
 
                 docker_tags=("${gitsha1}" "${CIRCLE_BRANCH}" "${CIRCLE_TAG}")
                 docker_tags+=("$(test ! -z "${CIRCLE_BRANCH}" && echo "branch.${CIRCLE_BRANCH}-${gitsha1}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_TAG}" && echo "tag.${CIRCLE_TAG}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_BUILD_NUM}" && echo "build.${CIRCLE_BUILD_NUM}")")
+                docker_tags+=("$(test ! -z "${CIRCLE_USERNAME}" && echo "user.${CIRCLE_USERNAME}")")
+                docker_tags+=("master.$([[ ${CIRCLE_BRANCH} == "master" ]] && echo "true" || echo "false")-${gitsha1}")
 
                 registry_path="hipages/$1"
-                
+
                 echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-                for docker_tag in ${docker_tags[@]}; do
-                    docker tag $2 "${registry_path}:$2-${docker_tag}" && \
-                    docker push "${registry_path}:$2-${docker_tag}"
+                for docker_tag in "${docker_tags[@]}"; do
+                    docker tag magic "${registry_path}:${docker_tag}" && \
+                    docker push "${registry_path}:${docker_tag}"
                 done
             }
 
-            function build_and_publish(){
-                build_docker_image "$1" "$3"
-                publish_image "$2" "$3"
-            }
 
-            build_and_publish "." "hyperkops" "monitor"
-
-            build_and_publish "./examples" "hyperkops" "workload"
-
-            build_and_publish "./hyperkops/worker" "hyperkops" "worker"
-
-
+            build_docker_image "."
+            publish_image "hyperkops"
 
   k8s_deploy:
     docker:
