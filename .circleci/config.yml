@@ -235,7 +235,7 @@ jobs:
 
             case "${repository}" in
                 hip-new)
-                    apps="$(yq -r '.www | .[] | keys | .[]' gomplate.yml | sed "s/^/${app_prefix} www-/") hip-admin homeimprovementpages.com.au"
+                    apps="$(yq -r '.www | .[] | keys | .[]' gomplate.yml | sed "s/^/${app_prefix} www-/") hip-admin homeimprovementpages.com.au hip-crons hip-daemons"
                 ;;
                 hip-message-service)
                     apps="message-service"
