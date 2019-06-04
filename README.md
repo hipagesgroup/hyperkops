@@ -1,4 +1,6 @@
-# Hyperkops
+# Hyperkops 
+© Hipages Group Pty Ltd 2019
+
 Monitor to supervise hyperopt deployment in K8s
 Hyperopt is designed to be deployed within a stable computing environment where the underlying instances
 are long lived, and the state of the asynchronous calcuation is held in MongoDb.
