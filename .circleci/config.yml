@@ -245,6 +245,7 @@ jobs:
                 ;;
                 image-service)
                     apps="image-service"
+                    app_prefix=""
                 ;;
                 platform-search-service)
                     apps="search-service"
