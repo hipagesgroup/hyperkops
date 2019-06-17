@@ -22,6 +22,7 @@ class PodMonitor:
         :return: None
         """
         running_pods = self.kube_api_connector.get_running_pods(self.selector)
+
         query_results = self.get_running_trials()
         pods_running_trials = self.get_pods_running_trials(query_results)
         deleted_pods = set(pods_running_trials) - set(running_pods)

@@ -6,11 +6,11 @@ setup(
     description='Monitoring tool which enables running hyperopt in kubenetes',
     url='https://github.com/hipagesgroup/hyperkops',
     author='hipages Datascience',
-    packages=['hyperkops'],
+    packages=['hyperkops', 'hyperkops.monitor'],
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'hyperkops-monitor=hyperkops.monitor:main_monitor'
+            'hyperkops-monitor=hyperkops.monitor.hyperopt_monitor:main_monitor'
         ]},
     install_requires=[
         'hyperopt==0.1.2',

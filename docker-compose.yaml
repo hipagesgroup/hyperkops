@@ -12,7 +12,8 @@ services:
       MONGO_DB_ADDRESS: mongo
       TRIALS_DB: model_db
       TRIALS_COLLECTION: jobs
-      TIMEOUT_INTERVAL: 15
+      NAMESPACE: hyperkops
+      SELECTOR: foo=bar
       UPDATE_INTERVAL: 1
       PYTHONUNBUFFERED: 0
       LOGLEVEL: INFO

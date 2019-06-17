@@ -26,7 +26,7 @@ class KubeUtil:
         :param selector: the label selector string in the key=value,key2=value2 format
         :return: a list of dicts eg. [{'pod':'foo', 'phase':'succeeded'}]
         """
-        print("Sensing pod statuses with selector {}".format(selector))
+        log.info("Sensing pod statuses with selector {}".format(selector))
         pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace, watch=False, label_selector=selector)
         # Type is V1PodList https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1PodList.md
         # print("api response {}".format(pod_list))
@@ -43,5 +43,7 @@ class KubeUtil:
         :return: a list of names of running pods
         """
         pod_status = self.get_status_of_all_pods(selector)
+
+        log.debug(pod_status)
 
         return [pod_info['pod'] for pod_info in pod_status if pod_info['phase'] == 'running']
