@@ -34,6 +34,9 @@ class KubeUtil:
         for i in pod_list.items:
             # i is of type V1Pod https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1Pod.md
             statuses.append({'pod': i.metadata.name, 'phase': i.status.phase})
+
+        log.debug(statuses)
+
         return statuses
 
     def get_running_pods(self, selector):
@@ -43,7 +46,5 @@ class KubeUtil:
         :return: a list of names of running pods
         """
         pod_status = self.get_status_of_all_pods(selector)
-
-        log.debug(pod_status)
 
         return [pod_info['pod'] for pod_info in pod_status if pod_info['phase'] == 'running']
