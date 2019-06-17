@@ -1,0 +1,181 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hyperopt-mongo
+  name: hyperopt-mongo
+  namespace: datascience
+spec:
+  ports:
+    - name: "mongo-db"
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: hyperopt-mongo
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperopt-workers
+  namespace: datascience
+  labels:
+    app: hyperopt-workers
+spec:
+  #  replicas: 30
+  template:
+    metadata:
+      name: hyperopt-workers
+      namespace: datascience
+      labels:
+        app: hyperopt-workers
+    spec:
+      containers:
+        - name: hyperopt-worker
+          image: hipages/hyperkops:user.datascienceChris
+          resources:
+            limits:
+              memory: "300Mi"
+              cpu: "1000m"
+            requests:
+              memory: "300Mi"
+              cpu: "1000m"
+          command:
+            - ./worker/kube_worker.sh
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "hyperopt-mongo.datascience.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "27017"
+      nodeSelector:
+        kops.k8s.io/instancegroup: dreadnought
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperopt-mongo
+  namespace: datascience
+  labels:
+    app: hyperopt-mongo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hyperopt-mongo
+      namespace: datascience
+      labels:
+        app: hyperopt-mongo
+    spec:
+      containers:
+        - name: mongo-db
+          image: mongo
+          resources:
+            limits:
+              cpu: "4"
+            requests:
+              cpu: "4"
+      nodeSelector:
+        kops.k8s.io/instancegroup: dreadnought
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperopt-stale-job-monitor
+  namespace: datascience
+  labels:
+    app: hyperopt-stale-job-monitor
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hyperopt-stale-job-monitor
+      namespace: datascience
+      labels:
+        app: hyperopt-stale-job-monitor
+    spec:
+      containers:
+        - name: hyperopt-stale-job-monitor
+          image: "{{ getenv "AWS_ACCOUNT_ID" }}.dkr.ecr.{{ getenv "AWS_DEFAULT_REGION" }}.amazonaws.com/hipagesgroup/radagast:{{ getenv "TOOLS_TAG" }}"
+          command:
+            - ./launch_model_fitter.sh
+          args: ["mongo_stale_trials_timeout"]
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "hyperopt-mongo.datascience.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "27017"
+            - name: UPDATE_INTERVAL
+              value: "120"
+            - name: TRIALS_TIMEOUT_INTERVAL
+              value: "15"
+            - name: LOGLEVEL
+              value: "DEBUG"
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "200Mi"
+            requests:
+              cpu: "100m"
+              memory: "200Mi"
+      restartPolicy: Always
+      nodeSelector:
+        kops.k8s.io/instancegroup: dreadnought
+#---
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  name: hyperopt-trials-content
+#  namespace: datascience
+#  labels:
+#    app: hyperopt-trials-content
+#spec:
+#  replicas: 1
+#  template:
+#    metadata:
+#      name: hyperopt-trials-content
+#      namespace: datascience
+#      labels:
+#        app: hyperopt-trials-content
+#    spec:
+#      containers:
+#        - name: hyperopt-trials-content
+#          image: "{{ getenv "AWS_ACCOUNT_ID" }}.dkr.ecr.{{ getenv "AWS_DEFAULT_REGION" }}.amazonaws.com/hipagesgroup/radagast:{{ getenv "TOOLS_TAG" }}"
+#          command:
+#            - ./launch_model_fitter.sh
+#          args: ["mongo_content_logging"]
+#          env:
+#            - name: MONGO_DB_ADDRESS
+#              value: "hyperopt-mongo.datascience.svc.cluster.local"
+#            - name: MONGO_DB_PORT
+#              value: "27017"
+#            - name: LOGLEVEL
+#              value: "DEBUG"
+#      restartPolicy: Always
+##############################
+# Worker Autoscaling
+##############################
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hyperopt-workers
+  namespace: datascience
+  labels:
+    app: hyperopt-workers
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: hyperopt-workers
+  minReplicas: 1
+  maxReplicas: 50
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 75
+##########################################################
+##########################################################
