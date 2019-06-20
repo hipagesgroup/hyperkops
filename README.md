@@ -26,7 +26,7 @@ Docker images with these components pre-installed can be found here:
 An example helm chart can be found here:
 
 # Hyperkops Monitor
-The Hyperops monitor looks for jobs which have been longer than a specified time and uUpserts the relevant records
+The Hyperkops Monitor looks for jobs which have been running longer than a specified time and upserts the relevant records
  in MongoDB to flag them as in an `Error` state. 
 
 ## Installing Hyperkops Monitor
