@@ -59,11 +59,11 @@ def main_monitor():
                         metavar='float',
                         help="Namespace in which the pods are deployed")
 
-    parser.add_argument("-s", "--selector",
-                        dest='selector',
-                        **environ_or_required("SELECTOR"),
+    parser.add_argument("-s", "--label-selector",
+                        dest='label-selector',
+                        **environ_or_required("LABEL_SELECTOR"),
                         metavar='float',
-                        help="Pod selector for the workers")
+                        help="Pod selector for the workers, format of key=value or key in (value1, value2)")
 
     args = parser.parse_args()
 
@@ -101,13 +101,4 @@ class HyperoptMonitor:
 
             sleep(self.update_interval)
 
-    @staticmethod
-    def parse_labels(label_selector_string):
-        label_selector_string = label_selector_string.replace("[()]", "")
 
-        labels = label_selector_string.split(",")
-
-        if len(labels) == 1:
-            return 'label=' + label_selector_string
-        else:
-            return 'label in (' + label_selector_string + ')'
