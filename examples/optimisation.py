@@ -75,7 +75,7 @@ mongo_api_address = "%s://%s:%s/%s/%s" % \
                      trials_db,
                      trials_collection)
 
-log.info("MongoDB Address :: " + mongo_api_address)
+log.info("MongoDB Address :: {}".format(mongo_api_address))
 ## Hyperopt settings
 num_eval_steps = int(config.num_eval_steps)
 
