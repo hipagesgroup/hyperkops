@@ -55,9 +55,9 @@ Example start command:
 
 # Hyperkops Worker
 The Hyperkops worker starts a hyperopt worker thread, inheriting any command line arguments it requires from
-suitably named environmental variables. In order to maintain the addressing convention to the MongoDB set out within
-other Hyperkops components, the MongoDB address is set using the specified environmental variables, whilst other
-hyperopt-worker configurations can be set by using the naming convention 
+suitably named environmental variables. In order to maintain a convention of addressing MongoDB the MongoDB address is
+set using the specified environmental variables, whilst other hyperopt-worker configurations can 
+be set by using the naming convention: 
 `HYPEROPT_<COMMAND LINE ARGUMENT NAME IN UPPER CASE>`. Examples are provided below but please refer
  to the hyperopt library itself for a comprehensive list of  [options](https://github.com/hyperopt/hyperopt/blob/master/hyperopt/mongoexp.py). 
 
