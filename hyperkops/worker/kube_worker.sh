@@ -15,7 +15,7 @@ trials_db=${TRIALS_DB:-model_db}
 # Create MongoDB Address from environmental variables
 mongo_db_full_qualified_address="${mongo_db_address}:${mongo_db_port}/${TRIALS_DB}"
 
-echo "MongoDB Adderss ${mongo_db_full_qualified_address}"
+echo "MongoDB Address ${mongo_db_full_qualified_address}"
 ## Create a string of arguments using the environmental variables
 argument_string="hyperopt-mongo-worker --mongo ${mongo_db_full_qualified_address} "
 
