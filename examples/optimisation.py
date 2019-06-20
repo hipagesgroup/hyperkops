@@ -114,7 +114,7 @@ def objective_currier(multiplier):
 
 
 object_curried = objective_currier(multiplier)
-log.info("Starting Optimisaiont")
+log.info("Starting Optimisation")
 # Run optimisation
 best = fmin(fn=object_curried,
             space=space,
