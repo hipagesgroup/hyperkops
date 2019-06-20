@@ -34,12 +34,5 @@ spec:
               value: "1000"
             - name: MULTIPLIER
               value: "2"
-      #          resources:
-      #            limits:
-      #              cpu: "100m"
-      #              memory: "200Mi"
-      #            requests:
-      #              cpu: "100m"
-      #              memory: "200Mi"
       restartPolicy: Always
 
