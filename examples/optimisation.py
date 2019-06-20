@@ -104,7 +104,7 @@ def objective_currier(multiplier):
 
     def objective_curried(args):
         case, val = args
-        log.debug(args)
+        log.debug("Arguments parsed {}".format(args))
         if case == 'case 1':
             return val
         else:
