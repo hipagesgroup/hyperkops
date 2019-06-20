@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
         - name: hyerkops-monitor
-          image: hyperkops:hyperkops-monitor
+          image: hipages/hyperkops-monitor:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
