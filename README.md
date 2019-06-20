@@ -1,7 +1,7 @@
 # Hyperkops
 
 This repo contains the components (collectively called Hyperkops) required to execute Baysien optimisaiton experiments within
-a scalebale kubernetes environment using the Python library [Hyperopt](https://github.com/hyperopt/hyperopt).  
+Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyperopt). 
 
 The hyperkops architecture is comprised of three main components:
 
