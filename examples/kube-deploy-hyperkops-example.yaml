@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo"
+              value: "hyperopt-mongo.datascience.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "27017"
             - name: LOGLEVEL
