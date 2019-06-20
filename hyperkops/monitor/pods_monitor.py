@@ -9,11 +9,11 @@ class PodMonitor:
     def __init__(self,
                  kube_connector,
                  mongodb_connection,
-                 selector):
+                 label_selector=None):
 
         self.kube_api_connector = kube_connector
         self.mongodb_connection = mongodb_connection
-        self.selector = selector
+        self.label_selector = label_selector
 
     def remove_dead_trials(self):
         """
@@ -21,7 +21,7 @@ class PodMonitor:
         in MongoDB as failed
         :return: None
         """
-        running_pods = self.kube_api_connector.get_running_pods(self.selector)
+        running_pods = self.kube_api_connector.get_running_pods(self.label_selector)
 
         query_results = self.get_running_trials()
         pods_running_trials = self.get_pods_running_trials(query_results)
@@ -46,6 +46,7 @@ class PodMonitor:
                 counter += 1
 
         log.info("Number of stale jobs detected : " + str(counter))
+
     def get_pods_running_trials(self, query_results):
         """
         Uses the results to find the unique names of pods running trials
