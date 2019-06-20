@@ -6,7 +6,7 @@ Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyper
 The hyperkops architecture is comprised of three main components:
 
 * Hyperkops Worker: Hyperopt worker
-* Hyperkops Monitor: Identifies and updates hyperopt trials which have run beyond a timeout limit
+* Hyperkops Monitor: Identifies and updates hyperopt trials which should be logged as failed due to Pod failure or rotation
 * MongoDB: MongoDB Instance
 
 Docker images with these components pre-installed can be found here:
