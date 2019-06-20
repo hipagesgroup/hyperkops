@@ -5,7 +5,7 @@ from time import sleep
 
 from hyperkops.monitor.kube_utils import KubeUtil
 from hyperkops.monitor.mongo_db_utils import MongodbConnection
-from hyperkops.monitor.running_pods_monitor import PodMonitor
+from hyperkops.monitor.pods_monitor import PodMonitor
 
 log.basicConfig(level=os.environ.get('LOGLEVEL', 'WARNING').upper())
 
@@ -57,13 +57,13 @@ def main_monitor():
                         dest='namespace',
                         **environ_or_required("NAMESPACE"),
                         metavar='float',
-                        help="Time between queries to the MongoDb to find failed jobs")
+                        help="Namespace in which the pods are deployed")
 
     parser.add_argument("-s", "--selector",
                         dest='selector',
                         **environ_or_required("SELECTOR"),
                         metavar='float',
-                        help="Time between queries to the MongoDb to find failed jobs")
+                        help="Pod selector for the workers")
 
     args = parser.parse_args()
 
@@ -76,8 +76,9 @@ class HyperoptMonitor:
     def __init__(self, config):
         self.config = config
         log.info("Starting Monitor")
-        self.start_monitoring()
         self.update_interval = float(config.update_interval)
+
+        self.start_monitoring()
 
     def start_monitoring(self):
         """
@@ -99,3 +100,14 @@ class HyperoptMonitor:
             pod_monitor.remove_dead_trials()
 
             sleep(self.update_interval)
+
+    @staticmethod
+    def parse_labels(label_selector_string):
+        label_selector_string = label_selector_string.replace("[()]", "")
+
+        labels = label_selector_string.split(",")
+
+        if len(labels) == 1:
+            return 'label=' + label_selector_string
+        else:
+            return 'label in (' + label_selector_string + ')'
