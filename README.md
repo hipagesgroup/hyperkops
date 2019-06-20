@@ -15,7 +15,7 @@ An example helm chart can be found here:
 
 Please find a more comprehensive introduction (here****)[LINK TO BLOG]
 
-# Hyerkops Architecture in Kubernetes
+# Hyperkops Architecture in Kubernetes
 
 [Hyperopt](https://github.com/hyperopt/hyperopt) allows us to parrallise our Bayesian optimisation jobs by distributing 
 the experiments across multiple workers, with state stored and shared through a MongoDB instance. If this system is 
