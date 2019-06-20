@@ -56,6 +56,7 @@ command line arguments or they can be inherited from environmental variables.
 |label-selector | LABEL_SELECTOR | Labels which identify relevant hyperkops worker pods | |
 
 Example start command:
+
 ```> hyperkops-monitor --mongo_db_address localhost --mongo_db_port 27017 --trials_db model_db --trials_collection jobs```
 
 
@@ -80,6 +81,7 @@ Example Hyperopt Worker commands:
 | HYPEROPT_LAST_JOB_TIMEOUT| --last-job-timeout | Do not reserve a job after T seconds have passed | 
 
 Example start command:
+
 ```> sh ./hyperkops/worker/kube_worker.sh```
 
 ## Fitting Master
