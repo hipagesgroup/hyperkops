@@ -8,8 +8,6 @@ class KubeUtil:
         log.info("Initialising Kuberenetes Connection")
         config.load_incluster_config()
         self.core_api = client.CoreV1Api()
-        self.batch_api = client.BatchV1Api()
-        self.extensions_api = client.ExtensionsV1beta1Api()
         self.namespace = namespace
 
     def list_pods(self):
