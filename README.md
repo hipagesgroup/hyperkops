@@ -18,7 +18,7 @@ MongoDB record, allowing the optimisation to finish.
 The hyperkops architecture is comprised of three main components:
 
 * Hyperkops Worker: Hyperopt worker
-* Hyperkops Monitor: Identifies and updates hyperopt trials which have ran beyond a timeout limit
+* Hyperkops Monitor: Identifies and updates hyperopt trials which have run beyond a timeout limit
 * MongoDB: MongoDB Instance
 
 Docker images with these components pre-installed can be found here:
