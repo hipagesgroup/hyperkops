@@ -10,14 +10,6 @@ class KubeUtil:
         self.core_api = client.CoreV1Api()
         self.namespace = namespace
 
-    def list_pods(self):
-        """
-        list of pods in the namespace
-        :return: dict object returned from the api
-        """
-        ret = self.core_api.list_namespaced_pod(namespace=self.namespace, watch=False)
-        return ret
-
     def get_status_of_all_pods(self, label_selector):
         """
         Get the pods and their phase status
