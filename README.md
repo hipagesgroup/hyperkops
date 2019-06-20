@@ -1,4 +1,5 @@
 # Hyperkops
+© Hipages Group Pty Ltd 2019
 
 This repo contains the components (collectively called Hyperkops) required to execute Baysien optimisaiton experiments within
 Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyperopt). 
