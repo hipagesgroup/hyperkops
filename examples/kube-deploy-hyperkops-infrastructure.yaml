@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: hyperkops-worker
-          image:  foo:foo
+          image:  hipages/hyperkops-worker:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
