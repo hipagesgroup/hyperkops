@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: hyperkops-example
-          image: hyperkops:hyperkops-examples
+          image: hipages/hyperkops-example:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
