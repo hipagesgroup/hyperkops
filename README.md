@@ -39,9 +39,6 @@ to be logged as running on deleted or failed pods are updated in MongoDB to flag
 ### Installing Hyperkops Monitor
 We recommend using the pre-built containers (LINK TO CONTAINERS****). If, however, you would like to install these components
 this repository is not yet available in the PyPI repository so installation from github using pip is recommended.
-The library is installed using pip by calling: 
-
-`pip install git+https://github.com/<REPO ADDRESS HERE>`
 
 ### Starting Hyperkops Monitor
 
