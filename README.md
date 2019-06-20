@@ -85,6 +85,10 @@ Example Hyperopt Worker commands:
 Example start command:
 ```> sh ./hyperkops/worker/kube_worker.sh```
 
+## Fitting Master
+A fitting master is any Python process which launches a [Hyperopt](https://github.com/hyperopt/hyperopt) 
+optimisation job. These can either be launched from your local machine, or from a Pod within Kubenernetes. See 
+[LINK TO BLOG***](for more details)
 
 # Example Workload
 Provided [here](./examples/optimisation.py) is an example workload which matches that seen in the [Hyperopt Documentation](http://hyperopt.github.io/hyperopt/).
