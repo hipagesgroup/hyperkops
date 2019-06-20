@@ -49,8 +49,6 @@ spec:
               value: "27017"
             - name: TRIALS_DB
               value: "models"
-#            - name: HYPEROPT_ARG_POLLING_INTERVAL
-#              value: "0.1"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -71,12 +69,6 @@ spec:
       containers:
         - name: mongo-db
           image: mongo
-#          resources:
-#            limits:
-#              cpu: 500
-#            requests:
-#              cpu: 500
-
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -125,59 +117,29 @@ spec:
               cpu: "100m"
               memory: "200Mi"
       restartPolicy: Always
-#---
-#apiVersion: extensions/v1beta1
-#kind: Deployment
-#metadata:
-#  name: hyperopt-trials-content
-#  namespace: datascience
-#  labels:
-#    app: hyperopt-trials-content
-#spec:
-#  replicas: 1
-#  template:
-#    metadata:
-#      name: hyperopt-trials-content
-#      namespace: datascience
-#      labels:
-#        app: hyperopt-trials-content
-#    spec:
-#      containers:
-#        - name: hyperopt-trials-content
-#          image: "{{ getenv "AWS_ACCOUNT_ID" }}.dkr.ecr.{{ getenv "AWS_DEFAULT_REGION" }}.amazonaws.com/hipagesgroup/radagast:{{ getenv "TOOLS_TAG" }}"
-#          command:
-#            - ./launch_model_fitter.sh
-#          args: ["mongo_content_logging"]
-#          env:
-#            - name: MONGO_DB_ADDRESS
-#              value: "hyperopt-mongo.datascience.svc.cluster.local"
-#            - name: MONGO_DB_PORT
-#              value: "27017"
-#            - name: LOGLEVEL
-#              value: "DEBUG"
-#      restartPolicy: Always
+
 ##############################
 # Worker Autoscaling
 ##############################
-#---
-#apiVersion: autoscaling/v2beta1
-#kind: HorizontalPodAutoscaler
-#metadata:
-#  name: hyperopt-workers
-#  namespace: datascience
-#  labels:
-#    app: hyperopt-workers
-#spec:
-#  scaleTargetRef:
-#    apiVersion: extensions/v1beta1
-#    kind: Deployment
-#    name: hyperopt-workers
-#  minReplicas: 1
-#  maxReplicas: 50
-#  metrics:
-#    - type: Resource
-#      resource:
-#        name: cpu
-#        targetAverageUtilization: 75
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hyperopt-workers
+  namespace: datascience
+  labels:
+    app: hyperopt-workers
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: hyperopt-workers
+  minReplicas: 1
+  maxReplicas: 50
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 75
 ##########################################################
 ##########################################################
