@@ -1,7 +1,7 @@
 import datetime
 from unittest import TestCase
 
-from hyperkops.monitor.running_pods_monitor import PodMonitor
+from hyperkops.monitor.pods_monitor import PodMonitor
 
 
 class TestPodMonitor(TestCase):
