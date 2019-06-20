@@ -63,7 +63,7 @@ hyperopt-worker configurations can be set by using the naming convention
 
 | Environmental Variable | Description | Default Value| 
 |----------------------|:-----------:|------------:|
-| MONGO_DB_ADDRESS | url to monogo db | localhost | 
+| MONGO_DB_ADDRESS | URL to MongoDB | localhost | 
 | MONGO_DB_PORT| mongo db port | 27017| 
 | TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db|
 
