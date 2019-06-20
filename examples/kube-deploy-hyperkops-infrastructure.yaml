@@ -24,7 +24,6 @@ metadata:
   labels:
     app: hyperopt-workers
 spec:
-  #  replicas: 30
   template:
     metadata:
       name: hyperopt-workers
@@ -33,24 +32,25 @@ spec:
         app: hyperopt-workers
     spec:
       containers:
-        - name: hyperopt-worker
-          image: hipages/hyperkops:user.datascienceChris
+        - name: hyperkops-worker
+          image:  foo:foo
+          imagePullPolicy: Never
           resources:
             limits:
               memory: "300Mi"
-              cpu: "1000m"
+              cpu: "200m"
             requests:
               memory: "300Mi"
-              cpu: "1000m"
-          command:
-            - ./worker/kube_worker.sh
+              cpu: "200m"
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo.datascience.svc.cluster.local"
+              value: "hyperopt-mongo"
             - name: MONGO_DB_PORT
               value: "27017"
-      nodeSelector:
-        kops.k8s.io/instancegroup: dreadnought
+            - name: TRIALS_DB
+              value: "models"
+#            - name: HYPEROPT_ARG_POLLING_INTERVAL
+#              value: "0.1"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -71,13 +71,11 @@ spec:
       containers:
         - name: mongo-db
           image: mongo
-          resources:
-            limits:
-              cpu: "4"
-            requests:
-              cpu: "4"
-      nodeSelector:
-        kops.k8s.io/instancegroup: dreadnought
+#          resources:
+#            limits:
+#              cpu: 500
+#            requests:
+#              cpu: 500
 
 ---
 apiVersion: extensions/v1beta1
@@ -97,22 +95,28 @@ spec:
         app: hyperopt-stale-job-monitor
     spec:
       containers:
-        - name: hyperopt-stale-job-monitor
-          image: "{{ getenv "AWS_ACCOUNT_ID" }}.dkr.ecr.{{ getenv "AWS_DEFAULT_REGION" }}.amazonaws.com/hipagesgroup/radagast:{{ getenv "TOOLS_TAG" }}"
-          command:
-            - ./launch_model_fitter.sh
-          args: ["mongo_stale_trials_timeout"]
+        - name: hyerkops-monitor
+          image: hyperkops:hyperkops-monitor
+          imagePullPolicy: Never
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo.datascience.svc.cluster.local"
+              value: "hyperopt-mongo"
             - name: MONGO_DB_PORT
               value: "27017"
             - name: UPDATE_INTERVAL
-              value: "120"
+              value: "5"
             - name: TRIALS_TIMEOUT_INTERVAL
               value: "15"
             - name: LOGLEVEL
               value: "DEBUG"
+            - name: TRIALS_DB
+              value: "models"
+            - name: TRIALS_COLLECTION
+              value: "models"
+            - name: NAMESPACE
+              value: "datascience"
+            - name: SELECTOR
+              value: "foo"
           resources:
             limits:
               cpu: "100m"
@@ -121,8 +125,6 @@ spec:
               cpu: "100m"
               memory: "200Mi"
       restartPolicy: Always
-      nodeSelector:
-        kops.k8s.io/instancegroup: dreadnought
 #---
 #apiVersion: extensions/v1beta1
 #kind: Deployment
@@ -157,25 +159,25 @@ spec:
 ##############################
 # Worker Autoscaling
 ##############################
----
-apiVersion: autoscaling/v2beta1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hyperopt-workers
-  namespace: datascience
-  labels:
-    app: hyperopt-workers
-spec:
-  scaleTargetRef:
-    apiVersion: extensions/v1beta1
-    kind: Deployment
-    name: hyperopt-workers
-  minReplicas: 1
-  maxReplicas: 50
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: 75
+#---
+#apiVersion: autoscaling/v2beta1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: hyperopt-workers
+#  namespace: datascience
+#  labels:
+#    app: hyperopt-workers
+#spec:
+#  scaleTargetRef:
+#    apiVersion: extensions/v1beta1
+#    kind: Deployment
+#    name: hyperopt-workers
+#  minReplicas: 1
+#  maxReplicas: 50
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        targetAverageUtilization: 75
 ##########################################################
 ##########################################################

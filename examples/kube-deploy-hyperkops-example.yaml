@@ -1,0 +1,45 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperkops-example
+  namespace: datascience
+  labels:
+    app: hyperkops-example
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hyperkops-example
+      namespace: datascience
+      labels:
+        app: hyperkops-example
+    spec:
+      containers:
+        - name: hyperkops-example
+          image: hyperkops:hyperkops-examples
+          imagePullPolicy: Never
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "hyperopt-mongo"
+            - name: MONGO_DB_PORT
+              value: "27017"
+            - name: LOGLEVEL
+              value: "DEBUG"
+            - name: TRIALS_DB
+              value: "models"
+            - name: TRIALS_COLLECTION
+              value: "models"
+            - name: NUM_EVAL_STEPS
+              value: "1000"
+            - name: MULTIPLIER
+              value: "2"
+      #          resources:
+      #            limits:
+      #              cpu: "100m"
+      #              memory: "200Mi"
+      #            requests:
+      #              cpu: "100m"
+      #              memory: "200Mi"
+      restartPolicy: Always
+
