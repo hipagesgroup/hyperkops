@@ -60,7 +60,7 @@ def main_monitor():
                         help="Namespace in which the pods are deployed")
 
     parser.add_argument("-s", "--label-selector",
-                        dest='label-selector',
+                        dest='label_selector',
                         **environ_or_required("LABEL_SELECTOR"),
                         metavar='float',
                         help="Pod selector for the workers, format of key=value or key in (value1, value2)")
@@ -94,7 +94,7 @@ class HyperoptMonitor:
 
         pod_monitor = PodMonitor(kube_api_connector,
                                  mongodb_connection,
-                                 self.config.selector)
+                                 self.config.label_selector)
 
         while True:
             pod_monitor.remove_dead_trials()

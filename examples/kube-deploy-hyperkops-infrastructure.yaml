@@ -115,8 +115,8 @@ spec:
               value: "models"
             - name: NAMESPACE
               value: "datascience"
-            - name: SELECTOR
-              value: "foo"
+            - name: LABEL_SELECTOR
+              value: "app=hyperopt-workers"
           resources:
             limits:
               cpu: "100m"
