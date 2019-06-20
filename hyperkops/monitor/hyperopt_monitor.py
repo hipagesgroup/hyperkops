@@ -56,13 +56,13 @@ def main_monitor():
     parser.add_argument("-n", "--namespace",
                         dest='namespace',
                         **environ_or_required("NAMESPACE"),
-                        metavar='float',
+                        metavar='str',
                         help="Namespace in which the pods are deployed")
 
     parser.add_argument("-s", "--label-selector",
                         dest='label_selector',
                         **environ_or_required("LABEL_SELECTOR"),
-                        metavar='float',
+                        metavar='str',
                         help="Pod selector for the workers, format of key=value or key in (value1, value2)")
 
     args = parser.parse_args()
