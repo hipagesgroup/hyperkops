@@ -41,7 +41,7 @@ class TestKubeUtil(TestCase):
             )
         )
 
-        actual = KubeUtil.get_status_of_all_pods(kube, selector="foo=bar")
+        actual = KubeUtil.get_status_of_all_pods(kube, label_selector="label=bar")
         self.assertEquals(actual, [{'pod': 'pod_1', 'phase': 'failed'},
                                    {'pod': 'pod_2', 'phase': 'pending'},
                                    {'pod': 'pod_3', 'phase': 'running'}])

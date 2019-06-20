@@ -20,14 +20,20 @@ class KubeUtil:
         ret = self.core_api.list_namespaced_pod(namespace=self.namespace, watch=False)
         return ret
 
-    def get_status_of_all_pods(self, selector):
+    def get_status_of_all_pods(self, label_selector):
         """
         Get the pods and their phase status
-        :param selector: the label selector string in the key=value,key2=value2 format
+        :param label_selector: the label selector string in the 'label=label1' or label is in (label1, label2)
         :return: a list of dicts eg. [{'pod':'foo', 'phase':'succeeded'}]
         """
-        log.info("Sensing pod statuses with selector {}".format(selector))
-        pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace, watch=False, label_selector=selector)
+        log.info("Sensing pod statuses with selector {}".format(label_selector))
+
+        if label_selector == None:
+            pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace)
+        else:
+            pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace,
+                                                         label_selector=label_selector)
+
         # Type is V1PodList https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1PodList.md
         # print("api response {}".format(pod_list))
         statuses = []
