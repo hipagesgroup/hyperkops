@@ -18,14 +18,11 @@ class KubeUtil:
         """
         log.info("Sensing pod statuses with selector {}".format(label_selector))
 
-        if label_selector == None:
+        if label_selector is None:
             pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace)
         else:
             pod_list = self.core_api.list_namespaced_pod(namespace=self.namespace,
                                                          label_selector=label_selector)
-
-        # Type is V1PodList https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1PodList.md
-        # print("api response {}".format(pod_list))
         statuses = []
         for i in pod_list.items:
             # i is of type V1Pod https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1Pod.md
