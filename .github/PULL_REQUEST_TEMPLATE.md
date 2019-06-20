@@ -1,15 +1,8 @@
-### Jira
+## What changes were proposed in this pull request?
 
-- [ ] Ticket:
- 
-### Description
+(Please fill in changes proposed in this fix)
 
-- [ ] Here are some details about my PR:
+## How was this patch tested?
 
-### Commits
-
-- [ ] I have squashed multiple commits if they address the same issue. 
-In addition, my commits follow the guidelines from 
-"[How to write a good git commit message](http://chris.beams.io/posts/git-commit/)"
-
-
+(Please explain how this patch was tested. E.g. unit tests, integration tests, manual tests)
+(If this patch involves UI changes, please attach a screenshot; otherwise, remove this)
