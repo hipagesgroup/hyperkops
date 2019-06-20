@@ -34,14 +34,7 @@ spec:
       containers:
         - name: hyperkops-worker
           image:  foo:foo
-          imagePullPolicy: Never
-          resources:
-            limits:
-              memory: "300Mi"
-              cpu: "200m"
-            requests:
-              memory: "300Mi"
-              cpu: "200m"
+          imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
               value: "hyperopt-mongo"
@@ -89,7 +82,7 @@ spec:
       containers:
         - name: hyerkops-monitor
           image: hyperkops:hyperkops-monitor
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
               value: "hyperopt-mongo"
