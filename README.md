@@ -24,7 +24,7 @@ job, if a worker fails through a Python exception the hyperopt-workers emit a sh
 all of the worker's current jobs into a failed state, allowing the [Hyperopt](https://github.com/hyperopt/hyperopt) job to complete.
 
 In Kubernetes the instances which execute the hyperopt-workers (Pods) can be significantly shorter lived than some
-optimisation jobs and are expected to get rotated on a regular basis. If a pod is deleted whilst the executing an experiment 
+optimisation jobs and are expected to get rotated on a regular basis. If a pod is deleted whilst executing an experiment 
 the hyperopt-worker will be killed before it can emit an error signal and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. 
 We therefore need to introduce an extra component (the pod monitor) which allow us to monitor our deployment, and update 
  relevant MongoDB entries for experiments we know to have been running on failed or deleted pods.   
