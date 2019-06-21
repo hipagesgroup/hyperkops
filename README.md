@@ -16,7 +16,7 @@ Please find a more comprehensive introduction (here****)[LINK TO BLOG]
 
 # Hyperkops Architecture in Kubernetes
 
-[Hyperopt](https://github.com/hyperopt/hyperopt) allows us to parrallise our Bayesian optimisation jobs by distributing 
+[Hyperopt](https://github.com/hyperopt/hyperopt) allows us to parallelise Bayesian optimisation jobs by distributing 
 the experiments across multiple workers, with state stored and shared through a MongoDB instance. If this system is 
 operated on a conventional cluster, where the underlying infrastructure is expected to a longer lived than any optimisation
 job, if a worker fails through a Python exception the hyperopt-workers emit a shutdown failure message to MongoDB, moving 
