@@ -1,7 +1,7 @@
 # Hyperkops
 © Hipages Group Pty Ltd 2019
 
-This repo contains the components (collectively called Hyperkops) required to execute distributed Baysien optimisaiton within
+This repository contains the components (collectively called Hyperkops) required to execute distributed Bayesian optimisation within
 Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyperopt). 
 
 The Hyperkops architecture is comprised of three main components:
