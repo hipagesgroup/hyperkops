@@ -198,14 +198,14 @@ jobs:
                     echo "${DOCKERHUB_PASS}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
                     for docker_tag in "${docker_public_tags[@]}"; do
                       docker tag "magic-${dockerfile_number}" "${registry_path}:${docker_tag}"
-            #                      docker push "${registry_path}:${docker_tag}"
+                        docker push "${registry_path}:${docker_tag}"
                     done
                   fi
                 else
                   registry_path="${docker_registry}/${registry_path}"
                   for docker_tag in ${docker_tags[@]}; do
                     docker tag "magic-${dockerfile_number}" "${registry_path}:${docker_tag}"
-                    docker push "${registry_path}:${docker_tag}" || { echo "docker push failed to ${registry_path}:${docker_tag}" ; exit 1; }
+            #                    docker push "${registry_path}:${docker_tag}" || { echo "docker push failed to ${registry_path}:${docker_tag}" ; exit 1; }
                   done
                 fi
 
