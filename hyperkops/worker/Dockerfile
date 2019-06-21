@@ -1,3 +1,4 @@
+#name: hyperkops-worker
 FROM python:3.6-slim
 
 ENV WORKER_HOME=/usr/local/hyperopt_worker
