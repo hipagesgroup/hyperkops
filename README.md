@@ -4,13 +4,11 @@
 This repo contains the components (collectively called Hyperkops) required to execute distributed Baysien optimisaiton within
 Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyperopt). 
 
-The hyperkops architecture is comprised of three main components:
+The Hyperkops architecture is comprised of three main components:
 
-* Hyperkops Worker: Hyperopt worker
-* Hyperkops Monitor: Identifies and updates hyperopt trials which should be logged as failed due to Pod failure or rotation
-* MongoDB: MongoDB Instance
-
-Docker images with these components pre-installed can be found here:
+* (Hyperkops Worker)[https://hub.docker.com/r/hipages/hyperkops-worker]: These run a hyperopt-worker, and execute each trial
+* (Hyperkops Monitor)[https://hub.docker.com/r/hipages/hyperkops-monitor]: Identifies and updates hyperopt trials which should be logged as failed due to Pod failure or rotation
+* (MongoDB)[https://hub.docker.com/_/mongo]: MongoDB Instance
 
 An example helm chart can be found here:
 
@@ -20,25 +18,25 @@ Please find a more comprehensive introduction (here****)[LINK TO BLOG]
 
 [Hyperopt](https://github.com/hyperopt/hyperopt) allows us to parrallise our Bayesian optimisation jobs by distributing 
 the experiments across multiple workers, with state stored and shared through a MongoDB instance. If this system is 
-operated on a conventional cluster, where the underlying infrastucture is expected to a longer lived than any optimsation
+operated on a conventional cluster, where the underlying infrastructure is expected to a longer lived than any optimisation
 job, if a worker fails through a Python exception the hyperopt-workers emit a shutdown failure message to MongoDB, moving 
 all of the worker's current jobs into a failed state, allowing the [Hyperopt](https://github.com/hyperopt/hyperopt) job to complete.
 
 In Kubernetes the instances which execute the hyperopt-workers (Pods) can be significantly shorter lived than some
-optimisation jobs and are expected to get rotated on a regular basis. If a pod is deleted whilst executing an experiment 
+optimisation jobs and are expected to get rotated on a regular basis. If a Pod is deleted whilst executing an experiment 
 the hyperopt-worker will be killed before it can emit an error signal and jobs remain in MongoDB indefinitely in a JOB_RUNNING_STATE. 
-We therefore need to introduce an extra component (the pod monitor) which allow us to monitor our deployment, and update 
- relevant MongoDB entries for experiments we know to have been running on failed or deleted pods.   
+We therefore need to introduce an extra component (the Pod Monitor) to monitor our deployment, and update 
+ relevant MongoDB entries for experiments we know to have been running on failed or deleted Pods.   
 
 ![ScreenShot](./img/architecture.png)
 
 ## Hyperkops Monitor
-The Hyperkops Monitor queries the MongoDB instance to find which pods are labelled as currently running experiments, and 
-queries the Kubernetes API to compare this list of Pods with  pods in a RUNNING state within the cluster. Any jobs found 
-to be logged as running on deleted or failed pods are updated in MongoDB to flag them as in an `Error` state. 
+The Hyperkops Monitor queries the MongoDB instance to find which Pods are labelled as currently running experiments, and 
+queries the Kubernetes API to compare this list of Pods with  Pods in a RUNNING state within the cluster. Any jobs found 
+to be logged as running on deleted or failed Pods are updated in MongoDB to flag them as in an `Error` state. 
 
 ### Installing Hyperkops Monitor
-We recommend using the pre-built containers (LINK TO CONTAINERS****). If, however, you would like to install these components
+We recommend using the pre-built containers (links provided above). If, however, you would like to install the Python components 
 this repository is not yet available in the PyPI repository so installation from github using pip is recommended.
 
 ### Starting Hyperkops Monitor
@@ -53,8 +51,8 @@ command line arguments or they can be inherited from environmental variables.
 |trials_db | TRIALS_DB | Name of the MongoDB in which the trials are stored | model_db| 
 |trials_collection | TRIALS_COLLECTION | Name of the Mongo Collection in which the trials are stored | jobs| 
 |update_interval |UPDATE_INTERVAL | Time between queries to the MongoDB to find failed jobs | 100| 
-|namespace | NAMESPACE | Namespace in which the pods to be monitored are being deployed | | 
-|label-selector | LABEL_SELECTOR | Labels which identify relevant hyperkops worker pods | |
+|namespace | NAMESPACE | Namespace in which the Pods to be monitored are being deployed | | 
+|label-selector | LABEL_SELECTOR | Labels which identify relevant Hyperkops worker Pods | |
 
 Example start command:
 
@@ -92,7 +90,7 @@ optimisation job. These can either be launched from your local machine, or from 
 
 # Example Workload
 Provided [here](./examples/optimisation.py) is an example workload which matches that seen in the [Hyperopt Documentation](http://hyperopt.github.io/hyperopt/).
-A prebuilt [Docker Container*****](LINK*****) is also provided, along with an example (Kubenetes Manifests****)[./examples/],
+A prebuilt [Docker Container](https://hub.docker.com/r/hipages/hyperkops-example) is also provided, along with an example (Kubenetes Manifests****)[./examples/],
  a Helm chart for this infrastructure is also [available***](LINNK****).
  
 
