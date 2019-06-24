@@ -1,3 +1,5 @@
+#name: hyperkops-example
+
 FROM python:3.6-slim
 MAINTAINER Hipages Data Science team <datascience@hipagesgroup.com.au>
 
