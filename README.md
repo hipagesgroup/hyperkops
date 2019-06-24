@@ -6,13 +6,11 @@ Kubernetes using the Python library [Hyperopt](https://github.com/hyperopt/hyper
 
 The Hyperkops architecture is comprised of three main components:
 
-* (Hyperkops Worker)[https://hub.docker.com/r/hipages/hyperkops-worker]: These run a hyperopt-worker, and execute each trial
-* (Hyperkops Monitor)[https://hub.docker.com/r/hipages/hyperkops-monitor]: Identifies and updates hyperopt trials which should be logged as failed due to Pod failure or rotation
-* (MongoDB)[https://hub.docker.com/_/mongo]: MongoDB Instance
+* [Hyperkops Worker](https://hub.docker.com/r/hipages/hyperkops-worker) These run a hyperopt-worker, and execute each trial
+* [Hyperkops Monitor](https://hub.docker.com/r/hipages/hyperkops-monitor): Identifies and updates hyperopt trials which should be logged as failed due to Pod failure or rotation
+* [MongoDB](https://hub.docker.com/_/mongo): MongoDB Instance
 
-An example helm chart can be found here:
-
-Please find a more comprehensive introduction (here****)[LINK TO BLOG]
+An example helm chart can be found [here](https://github.com/hipagesgroup/chart-hyperopt).
 
 # Hyperkops Architecture in Kubernetes
 
@@ -85,14 +83,39 @@ Example start command:
 
 ## Fitting Master
 A fitting master is any Python process which launches a [Hyperopt](https://github.com/hyperopt/hyperopt) 
-optimisation job. These can either be launched from your local machine, or from a Pod within Kubenernetes. See 
-[LINK TO BLOG***](for more details)
+optimisation job. These can either be launched from your local machine, or from a Pod within Kubenernetes. 
 
 # Example Workload
 Provided [here](./examples/optimisation.py) is an example workload which matches that seen in the [Hyperopt Documentation](http://hyperopt.github.io/hyperopt/).
-A prebuilt [Docker Container](https://hub.docker.com/r/hipages/hyperkops-example) is also provided, along with an example (Kubenetes Manifests****)[./examples/],
- a Helm chart for this infrastructure is also [available***](LINNK****).
- 
+A prebuilt [Docker Container](https://hub.docker.com/r/hipages/hyperkops-example) is also provided, along with an example (Kubenetes Manifest)[./examples/kube-deploy-hyperkops-infrastructure.yaml],
+ a Helm chart for this infrastructure is also [available](https://github.com/hipagesgroup/chart-hyperopt).
+
+## Starting the infrastructure
+  
+### Helm
+Helm users can find charts for infrastructure [here](https://github.com/hipagesgroup/chart-hyperopt). This can then be launched with the command:
+Note defaults for the min and max number of works, and the autoscaling criteria may need to be changed to suit your use case, and cluster size.
+### Kubernetes Manifest
+There is also an example Kubernetes manifest to be found here, note that this launches jobs into a namespace of `datascience`. 
+
+```kubectl apply -f kube-deploy-hyperkops-infrastructure.yam```
+
+## Launching jobs from your local machine
+Typically connections external connections to pods within Kubernetes are handled by connecting their relevant service to an ingress. 
+Unfortunately, this doesn't work in Kubernetes because connections to the ingress pass through an Nginx instance which expects http connections. 
+To get around these limitations its possible to connect to the MongoDB instance by port forwarding the relevant service 
+within Kubernetes to your local instance. In our example this is done using:
+```kubectl port-forward svc/hyperkops-mongo :27017:27017```
+Assuming you hve the correct privileges to port forward within your Kubernetes environment. 
+With this port forwarding in place trials can be submitting into MongoDB by addressing the relevant port on your local instance, eg:
+
+```trials = MongoTrials(localhost:27107)```
+
+## Launching jobs from within Kubernetes
+Pods connecting within Kubernetes should connect using the relevant service endpoint and a cluster IP or domain name. 
+In the chart and manifest provided this endpoint should be at:
+
+```hyperkops-mongo.datascience.svc.cluster.local```
 
 # Future Work
 * UI to allow monitoring of currently running jobs
