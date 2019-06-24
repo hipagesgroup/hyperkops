@@ -3,8 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: hyperopt-mongo
-  name: hyperopt-mongo
+    app: hyperkops-mongo
+  name: hyperkops-mongo
   namespace: datascience
 spec:
   ports:
@@ -13,23 +13,23 @@ spec:
       port: 27017
       targetPort: 27017
   selector:
-    app: hyperopt-mongo
+    app: hyperkops-mongo
   type: ClusterIP
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hyperopt-workers
+  name: hyperkops-workers
   namespace: datascience
   labels:
-    app: hyperopt-workers
+    app: hyperkops-workers
 spec:
   template:
     metadata:
-      name: hyperopt-workers
+      name: hyperkops-workers
       namespace: datascience
       labels:
-        app: hyperopt-workers
+        app: hyperkops-workers
     spec:
       containers:
         - name: hyperkops-worker
@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo.datascience.svc.cluster.local"
+              value: "hyperkops-mongo.datascience.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "27017"
             - name: TRIALS_DB
@@ -46,18 +46,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hyperopt-mongo
+  name: hyperkops-mongo
   namespace: datascience
   labels:
-    app: hyperopt-mongo
+    app: hyperkops-mongo
 spec:
   replicas: 1
   template:
     metadata:
-      name: hyperopt-mongo
+      name: hyperkops-mongo
       namespace: datascience
       labels:
-        app: hyperopt-mongo
+        app: hyperkops-mongo
     spec:
       containers:
         - name: mongo-db
@@ -66,18 +66,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hyperopt-stale-job-monitor
+  name: hyperkops-stale-job-monitor
   namespace: datascience
   labels:
-    app: hyperopt-stale-job-monitor
+    app: hyperkops-stale-job-monitor
 spec:
   replicas: 1
   template:
     metadata:
-      name: hyperopt-stale-job-monitor
+      name: hyperkops-stale-job-monitor
       namespace: datascience
       labels:
-        app: hyperopt-stale-job-monitor
+        app: hyperkops-stale-job-monitor
     spec:
       containers:
         - name: hyerkops-monitor
@@ -85,7 +85,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo.datascience.svc.cluster.local"
+              value: "hyperkops-mongo.datascience.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "27017"
             - name: UPDATE_INTERVAL
@@ -101,7 +101,7 @@ spec:
             - name: NAMESPACE
               value: "datascience"
             - name: LABEL_SELECTOR
-              value: "app=hyperopt-workers"
+              value: "app=hyperkops-workers"
       restartPolicy: Always
 
 ##############################
@@ -111,15 +111,15 @@ spec:
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: hyperopt-workers
+  name: hyperkops-workers
   namespace: datascience
   labels:
-    app: hyperopt-workers
+    app: hyperkops-workers
 spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: hyperopt-workers
+    name: hyperkops-workers
   minReplicas: 1
   maxReplicas: 50
   metrics:
