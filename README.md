@@ -97,4 +97,4 @@ A prebuilt [Docker Container](https://hub.docker.com/r/hipages/hyperkops-example
 # Future Work
 * UI to allow monitoring of currently running jobs
 * Create a high-avaiablilty version of MongoDb
-  
+* On-the-fly installation into the worker of required Python libraries 
