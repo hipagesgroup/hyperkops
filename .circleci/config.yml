@@ -198,7 +198,7 @@ jobs:
                     registry_path="hipages/${DOCKER_IMAGE}"
                     docker_public_tags=("${gitsha1}" "latest")
                     # Login to docker hub
-                    echo "${DOCKERHUB_PASS}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
+                    echo "${DOCKERHUB_PASS}" | sudo docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
                     for docker_tag in "${docker_public_tags[@]}"; do
                       docker tag "magic-${dockerfile_number}" "${registry_path}:${docker_tag}"
                       docker push "${registry_path}:${docker_tag}"
