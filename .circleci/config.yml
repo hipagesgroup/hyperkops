@@ -130,6 +130,9 @@ jobs:
       - checkout
       - *save_repo
       - setup_remote_docker
+      - *yarn_restore_cache
+      - *install_makefile
+      - run: sudo -E make tools/install-ecr-helper
       - run:
           name: Build Docker Image
           command: |
