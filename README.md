@@ -96,7 +96,7 @@ A prebuilt [Docker Container](https://hub.docker.com/r/hipages/hyperkops-example
 Helm users can find charts for infrastructure [here](https://github.com/hipagesgroup/chart-hyperopt). This can then be launched with the command:
 Note defaults for the min and max number of works, and the autoscaling criteria may need to be changed to suit your use case, and cluster size.
 ### Kubernetes Manifest
-There is also an example Kubernetes manifest to be found here, note that this launches jobs into a namespace of `datascience`. 
+There is also an example Kubernetes manifest to be found [here](./examples/kube-deploy-hyperkops-infrastructure.yaml), note that this launches jobs into a namespace of `datascience`. 
 
 ```kubectl apply -f kube-deploy-hyperkops-infrastructure.yam```
 
@@ -116,6 +116,9 @@ Pods connecting within Kubernetes should connect using the relevant service endp
 In the chart and manifest provided this endpoint should be at:
 
 ```hyperkops-mongo.datascience.svc.cluster.local```
+
+The example workload can be started using the Kubernetes manifest found in the [examples folder](./examples/kube-deploy-hyperkops-example.yaml), 
+or by using the [helm chart](https://github.com/hipagesgroup/chart-hyperopt). 
 
 # Future Work
 * UI to allow monitoring of currently running jobs
