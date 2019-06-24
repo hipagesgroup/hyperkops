@@ -1,0 +1,129 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hyperkops-mongo
+  name: hyperkops-mongo
+  namespace: datascience
+spec:
+  ports:
+    - name: "mongo-db"
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: hyperkops-mongo
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperkops-workers
+  namespace: datascience
+  labels:
+    app: hyperkops-workers
+spec:
+  template:
+    metadata:
+      name: hyperkops-workers
+      namespace: datascience
+      labels:
+        app: hyperkops-workers
+    spec:
+      containers:
+        - name: hyperkops-worker
+          image:  hipages/hyperkops-worker:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "hyperkops-mongo.datascience.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "27017"
+            - name: TRIALS_DB
+              value: "models"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperkops-mongo
+  namespace: datascience
+  labels:
+    app: hyperkops-mongo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hyperkops-mongo
+      namespace: datascience
+      labels:
+        app: hyperkops-mongo
+    spec:
+      containers:
+        - name: mongo-db
+          image: mongo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hyperkops-stale-job-monitor
+  namespace: datascience
+  labels:
+    app: hyperkops-stale-job-monitor
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hyperkops-stale-job-monitor
+      namespace: datascience
+      labels:
+        app: hyperkops-stale-job-monitor
+    spec:
+      containers:
+        - name: hyerkops-monitor
+          image: hipages/hyperkops-monitor:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_DB_ADDRESS
+              value: "hyperkops-mongo.datascience.svc.cluster.local"
+            - name: MONGO_DB_PORT
+              value: "27017"
+            - name: UPDATE_INTERVAL
+              value: "5"
+            - name: TRIALS_TIMEOUT_INTERVAL
+              value: "15"
+            - name: LOGLEVEL
+              value: "DEBUG"
+            - name: TRIALS_DB
+              value: "models"
+            - name: TRIALS_COLLECTION
+              value: "models"
+            - name: NAMESPACE
+              value: "datascience"
+            - name: LABEL_SELECTOR
+              value: "app=hyperkops-workers"
+      restartPolicy: Always
+
+##############################
+# Worker Autoscaling
+##############################
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hyperkops-workers
+  namespace: datascience
+  labels:
+    app: hyperkops-workers
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: hyperkops-workers
+  minReplicas: 1
+  maxReplicas: 50
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 75

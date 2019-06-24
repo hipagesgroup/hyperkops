@@ -75,6 +75,7 @@ mongo_api_address = "%s://%s:%s/%s/%s" % \
                      trials_db,
                      trials_collection)
 
+log.info("MongoDB Address :: {}".format(mongo_api_address))
 ## Hyperopt settings
 num_eval_steps = int(config.num_eval_steps)
 
@@ -103,6 +104,7 @@ def objective_currier(multiplier):
 
     def objective_curried(args):
         case, val = args
+        log.debug("Arguments parsed {}".format(args))
         if case == 'case 1':
             return val
         else:
@@ -112,7 +114,7 @@ def objective_currier(multiplier):
 
 
 object_curried = objective_currier(multiplier)
-
+log.info("Starting Optimisation")
 # Run optimisation
 best = fmin(fn=object_curried,
             space=space,
@@ -121,6 +123,7 @@ best = fmin(fn=object_curried,
             trials=trials,
             verbose=1)
 
+log.info("Finished Optimisation")
 # Get the values of the best space
 best_space = space_eval(space, best)
 
