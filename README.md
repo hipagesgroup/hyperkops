@@ -101,7 +101,7 @@ There is also an example Kubernetes manifest to be found here, note that this la
 ```kubectl apply -f kube-deploy-hyperkops-infrastructure.yam```
 
 ## Launching jobs from your local machine
-Typically connections external connections to pods within Kubernetes are handled by connecting their relevant service to an ingress. 
+Typically external connections to pods within Kubernetes are handled by connecting their relevant service to an ingress. 
 Unfortunately, this doesn't work in Kubernetes because connections to the ingress pass through an Nginx instance which expects http connections. 
 To get around these limitations its possible to connect to the MongoDB instance by port forwarding the relevant service 
 within Kubernetes to your local instance. In our example this is done using:
