@@ -106,7 +106,7 @@ Unfortunately, this doesn't work in Kubernetes because connections to the ingres
 To get around these limitations its possible to connect to the MongoDB instance by port forwarding the relevant service 
 within Kubernetes to your local instance. In our example this is done using:
 ```kubectl port-forward svc/hyperkops-mongo :27017:27017```
-Assuming you hve the correct privileges to port forward within your Kubernetes environment. 
+Assuming you have the correct privileges to port forward within your Kubernetes environment. 
 With this port forwarding in place trials can be submitting into MongoDB by addressing the relevant port on your local instance, eg:
 
 ```trials = MongoTrials(localhost:27107)```
