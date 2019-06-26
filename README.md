@@ -105,7 +105,9 @@ Typically external connections to pods within Kubernetes are handled by connecti
 Unfortunately, this doesn't work in Kubernetes because connections to the ingress pass through an Nginx instance which expects http connections. 
 To get around these limitations its possible to connect to the MongoDB instance by port forwarding the relevant service 
 within Kubernetes to your local instance. In our example this is done using:
-```kubectl port-forward svc/hyperkops-mongo :27017:27017```
+
+```kubectl port-forward <mongo-db pod name> 27017:27017```
+
 Assuming you have the correct privileges to port forward within your Kubernetes environment. 
 With this port forwarding in place trials can be submitting into MongoDB by addressing the relevant port on your local instance, eg:
 
