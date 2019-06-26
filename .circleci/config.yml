@@ -130,6 +130,9 @@ jobs:
       - checkout
       - *save_repo
       - setup_remote_docker
+      - *yarn_restore_cache
+      - *install_makefile
+      - run: sudo -E make tools/install-ecr-helper
       - run:
           name: Build Docker Image
           command: |
@@ -195,7 +198,7 @@ jobs:
                     registry_path="hipages/${DOCKER_IMAGE}"
                     docker_public_tags=("${gitsha1}" "latest")
                     # Login to docker hub
-                    echo "${DOCKERHUB_PASS}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
+                    echo "${DOCKERHUB_PASS}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin || exit 1;
                     for docker_tag in "${docker_public_tags[@]}"; do
                       docker tag "magic-${dockerfile_number}" "${registry_path}:${docker_tag}"
                       docker push "${registry_path}:${docker_tag}"
