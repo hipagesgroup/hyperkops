@@ -1,13 +1,12 @@
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: hyperkops-example
   namespace: datascience
   labels:
     app: hyperkops-example
 spec:
-  replicas: 1
   template:
     metadata:
       name: hyperkops-example
@@ -16,12 +15,19 @@ spec:
         app: hyperkops-example
     spec:
       containers:
-        - name: hyperkops-example
-          image: hipages/hyperkops-example:latest
+        - name: hipages/hyperkops-example:latest
+          image: hipages/
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
           env:
             - name: MONGO_DB_ADDRESS
-              value: "hyperopt-mongo.datascience.svc.cluster.local"
+              value: "hyperkops-mongo.datascience.svc.cluster.local"
             - name: MONGO_DB_PORT
               value: "27017"
             - name: LOGLEVEL
@@ -29,10 +35,12 @@ spec:
             - name: TRIALS_DB
               value: "models"
             - name: TRIALS_COLLECTION
-              value: "models"
+              value: "jobs"
             - name: NUM_EVAL_STEPS
-              value: "1000"
+              value: "10"
             - name: MULTIPLIER
               value: "2"
-      restartPolicy: Always
+            - name: PYTHONUNBUFFERED
+              value: "1"
+      restartPolicy: OnFailure
 

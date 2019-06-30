@@ -103,10 +103,9 @@ def objective_currier(multiplier):
     """
 
     def objective_curried(args):
-        import logging as log 
-        
+        import logging as log
+        log.warning("Arguments parsed {}".format(args))
         case, val = args
-        log.debug("Arguments parsed {}".format(args))
         if case == 'case 1':
             return val
         else:
@@ -123,7 +122,7 @@ best = fmin(fn=object_curried,
             algo=tpe.suggest,
             max_evals=num_eval_steps,
             trials=trials,
-            verbose=1)
+            verbose=9)
 
 log.info("Finished Optimisation")
 # Get the values of the best space

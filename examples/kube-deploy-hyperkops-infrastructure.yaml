@@ -35,6 +35,13 @@ spec:
         - name: hyperkops-worker
           image:  hipages/hyperkops-worker:latest
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
           env:
             - name: MONGO_DB_ADDRESS
               value: "hyperkops-mongo.datascience.svc.cluster.local"
@@ -42,6 +49,8 @@ spec:
               value: "27017"
             - name: TRIALS_DB
               value: "models"
+            - name: PYTHONUNBUFFERED
+              value: "1"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -83,6 +92,13 @@ spec:
         - name: hyerkops-monitor
           image: hipages/hyperkops-monitor:latest
           imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "2000m"
+              memory: "500Mi"
+            requests:
+              cpu: "2000m"
+              memory: "500Mi"
           env:
             - name: MONGO_DB_ADDRESS
               value: "hyperkops-mongo.datascience.svc.cluster.local"
@@ -97,7 +113,7 @@ spec:
             - name: TRIALS_DB
               value: "models"
             - name: TRIALS_COLLECTION
-              value: "models"
+              value: "jobs"
             - name: NAMESPACE
               value: "datascience"
             - name: LABEL_SELECTOR
