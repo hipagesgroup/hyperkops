@@ -15,8 +15,8 @@ spec:
         app: hyperkops-example
     spec:
       containers:
-        - name: hipages/hyperkops-example:latest
-          image: hipages/
+        - name: hyperkops-example
+          image: hipages/hyperkops-example:latest
           imagePullPolicy: IfNotPresent
           resources:
             limits:
