@@ -12,4 +12,4 @@ COPY setup.py setup.py
 RUN pip install --upgrade pip && \
     python ${HYPERKOPS_HOME}/setup.py install
 
- ENTRYPOINT hyperkops-monitor
+ENTRYPOINT hyperkops-monitor
