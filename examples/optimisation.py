@@ -8,6 +8,8 @@ import uuid
 from hyperopt import hp, fmin, tpe, space_eval
 from hyperopt.mongoexp import MongoTrials
 
+# Set logging level from environment
+log.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 def environ_or_required(key):
     if os.environ.get(key):
@@ -103,8 +105,11 @@ def objective_currier(multiplier):
     """
 
     def objective_curried(args):
+        import logging as log
+
+        log.info("Arguments parsed {}".format(args))
+
         case, val = args
-        log.debug("Arguments parsed {}".format(args))
         if case == 'case 1':
             return val
         else:
