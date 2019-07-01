@@ -40,7 +40,9 @@ class PodMonitor:
         for trial in trials_list:
             if self.get_pod_name_from_owner_string(trial['owner'][0]) in list(deleted_pods):
                 trial['state'] = JOB_STATE_ERROR
-                log.warning("Trial deleted from MongoDB owner = " + str(trial['owner'][0]))
+                log.warning("Trial deleted from MongoDB owner = " +
+                            self.get_pod_name_from_owner_string(str(trial['owner'][0])))
+
                 # Upsert the job into mongodb
                 self.mongodb_connection.collection.replace_one({'_id': trial['_id']}, trial, True)
                 counter += 1
