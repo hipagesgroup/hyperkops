@@ -8,6 +8,8 @@ import uuid
 from hyperopt import hp, fmin, tpe, space_eval
 from hyperopt.mongoexp import MongoTrials
 
+# Set logging level from environment
+log.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 def environ_or_required(key):
     if os.environ.get(key):
