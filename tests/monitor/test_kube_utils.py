@@ -21,38 +21,38 @@ class TestKubeUtil(TestCase):
                         kind='Pod',
                         metadata=V1ObjectMeta(name="pod_1"),
                         spec=None,
-                        status=V1PodStatus(phase='failed')
+                        status=V1PodStatus(phase='Failed')
                     ),
                     V1Pod(
                         api_version='v1',
                         kind='Pod',
                         metadata=V1ObjectMeta(name="pod_2"),
                         spec=None,
-                        status=V1PodStatus(phase='pending')
+                        status=V1PodStatus(phase='Pending')
                     ),
                     V1Pod(
                         api_version='v1',
                         kind='Pod',
                         metadata=V1ObjectMeta(name="pod_3"),
                         spec=None,
-                        status=V1PodStatus(phase='running')
+                        status=V1PodStatus(phase='Running')
                     )
                 ]
             )
         )
 
         actual = KubeUtil.get_status_of_all_pods(kube, label_selector="label=bar")
-        self.assertEquals(actual, [{'pod': 'pod_1', 'phase': 'failed'},
-                                   {'pod': 'pod_2', 'phase': 'pending'},
-                                   {'pod': 'pod_3', 'phase': 'running'}])
+        self.assertEquals(actual, [{'pod': 'pod_1', 'phase': 'Failed'},
+                                   {'pod': 'pod_2', 'phase': 'Pending'},
+                                   {'pod': 'pod_3', 'phase': 'Running'}])
 
     @patch('hyperkops.monitor.kube_utils.KubeUtil')
     def test_get_only_running_pods(self, kube):
         # Mocking kube api - https://github.com/kubernetes-client/python/blob/9b438eed5a4fdab4377515b5a0c62d695dffc354/kubernetes/docs/V1PodList.md
         kube.get_status_of_all_pods = MagicMock(
-            return_value=[{'pod': 'pod_1', 'phase': 'failed'},
-                          {'pod': 'pod_2', 'phase': 'pending'},
-                          {'pod': 'pod_3', 'phase': 'running'}]
+            return_value=[{'pod': 'pod_1', 'phase': 'Failed'},
+                          {'pod': 'pod_2', 'phase': 'Pending'},
+                          {'pod': 'pod_3', 'phase': 'Running'}]
         )
 
         actual = KubeUtil.get_running_pods(kube, selector="foo=bar")
