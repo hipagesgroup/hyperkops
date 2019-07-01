@@ -104,7 +104,9 @@ def objective_currier(multiplier):
 
     def objective_curried(args):
         import logging as log
-        log.warning("Arguments parsed {}".format(args))
+
+        log.info("Arguments parsed {}".format(args))
+
         case, val = args
         if case == 'case 1':
             return val
