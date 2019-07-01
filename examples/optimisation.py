@@ -122,7 +122,7 @@ best = fmin(fn=object_curried,
             algo=tpe.suggest,
             max_evals=num_eval_steps,
             trials=trials,
-            verbose=9)
+            verbose=1)
 
 log.info("Finished Optimisation")
 # Get the values of the best space
