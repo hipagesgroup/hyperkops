@@ -39,5 +39,8 @@ class KubeUtil:
         :return: a list of names of running pods
         """
         pod_status = self.get_status_of_all_pods(selector)
+        running_pods = [pod_info['pod'] for pod_info in pod_status if pod_info['phase'] == 'Running']
 
-        return [pod_info['pod'] for pod_info in pod_status if pod_info['phase'] == 'running']
+        log.debug("Running pods : " + str(running_pods))
+
+        return running_pods
