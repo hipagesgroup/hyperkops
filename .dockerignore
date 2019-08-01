@@ -1,1 +1,16 @@
-{{- template "dockerignore-chart" -}}
+.dockerignore
+.git
+.gitignore
+.travis.yml
+Dockerfile
+README*
+kube*
+test*
+*.swp
+.circleci
+.editorconfig
+.github
+.releaserc
+Makefil*
+gomplate.yml
+secrets.sh
