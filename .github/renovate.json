@@ -1,0 +1,11 @@
+{
+  "docker": {
+    "enabled": false
+  },
+  "docker-compose": {
+    "enabled": false
+  },
+  "circleci": {
+    "enabled": false
+  }
+}
