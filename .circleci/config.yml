@@ -69,7 +69,7 @@ references:
     run:
       name: Install dockerlint
       command: |
-        yarn global add --prefer-offline --no-progress --non-interactive "dockerlint@0.3.9"
+        yarn global add --no-progress --non-interactive "dockerlint@0.3.9"
 
   install_codeclimate: &install_codeclimate
     run:
