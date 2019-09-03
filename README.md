@@ -27,6 +27,7 @@ We therefore need to introduce an extra component (the Pod Monitor) to monitor o
  relevant MongoDB entries for experiments we know to have been running on failed or deleted Pods.   
 
 ![ScreenShot](./img/architecture.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhipagesgroup%2Fhyperkops.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhipagesgroup%2Fhyperkops?ref=badge_shield)
 
 ## Hyperkops Monitor
 The Hyperkops Monitor queries the MongoDB instance to find which Pods are labelled as currently running experiments, and 
@@ -126,3 +127,7 @@ or by using the [helm chart](https://github.com/hipagesgroup/chart-hyperopt).
 * UI to allow monitoring of currently running jobs
 * Create a high-avaiablilty version of MongoDb
 * On-the-fly installation into the worker of required Python libraries 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhipagesgroup%2Fhyperkops.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhipagesgroup%2Fhyperkops?ref=badge_large)
