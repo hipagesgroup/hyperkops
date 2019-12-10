@@ -19,6 +19,7 @@ setup(
         'python-dateutil==2.8.0',
         'requests_oauthlib==1.2.0',
         'requests==2.21.0',
-        ' urllib3==1.23',
-        'kubernetes>=3.0.0']
+        'urllib3>=1.24.2',
+        'kubernetes>=3.0.0',
+    ]
 )
