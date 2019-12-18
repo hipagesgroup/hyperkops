@@ -6,7 +6,7 @@
 # You can also use email addresses if you prefer.
 
 # managed by repo-man
-.github/*     @estahn @jurgenweber
-.circle*    @estahn @jurgenweber
-.releaserc  @estahn @jurgenweber
+.github/*     @estahn
+.circle*    @estahn
+.releaserc  @estahn
 * @arihantsurana @datascienceChris @Gurado
